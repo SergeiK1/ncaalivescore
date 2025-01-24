@@ -1,4 +1,3 @@
 # ncaalivescore
 
-
-test huge
+they aint ready
