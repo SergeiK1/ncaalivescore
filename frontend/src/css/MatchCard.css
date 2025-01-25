@@ -1,13 +1,31 @@
 .match-card {
   background-color: #ffffff; /* Clean white background */
-  padding: 1.5rem; /* Spacious padding */
-  border-radius: 12px; /* Modern rounded corners */
-  margin-bottom: 1rem; /* Space between cards */
+  padding: 2.2rem; /* Spacious padding for better balance */
+  border-radius: 16px; /* Slightly larger rounded corners */
+  margin-bottom: 1.5rem; /* More space between cards */
   display: flex;
-  flex-direction: row; /* Horizontal layout for teams */
-  justify-content: space-around; /* Distribute space between teams and "VS" */
+  flex-direction: row; /* Horizontal layout for desktop */
+  justify-content: space-between; /* Even spacing between teams and "VS" */
   align-items: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  box-shadow: 0 4px 8px rgba(2, 105, 55, 0.4); /* Subtle shadow for depth */
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth hover effect */
+  max-width: 100%; /* Ensure card does not overflow */
+  box-sizing: border-box; /* Include padding in width/height calculations */
+  overflow: hidden; /* Prevent internal overflow */
+}
+
+/* Hover effect for a modern look */
+.match-card:hover {
+  transform: scale(1.02); /* Slightly enlarges the card */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Adds a deeper shadow */
+}
+
+.score-container {
+  display: flex;
+  align-items: center; /* Align logos and scores vertically */
+  gap: 1.5rem; /* Increased gap for better spacing */
+  flex-wrap: nowrap; /* Prevent content from wrapping */
+  overflow: hidden; /* Ensure no horizontal scrolling occurs */
 }
 
 .team {
@@ -15,32 +33,62 @@
   flex-direction: column; /* Vertical stack for name, logo, and score */
   align-items: center; /* Center align the content */
   text-align: center;
+  flex-shrink: 1; /* Prevent team container from overflowing */
 }
 
 .team-logo {
-  width: 80px; /* Increased size for better visibility */
-  height: 80px;
+  width: 100px; /* Larger size for better visibility */
+  height: 100px;
   object-fit: contain; /* Ensure full logo is visible without cutting */
-  border: 2px solid #ccc; /* Optional border for emphasis */
-  margin: 0.5rem 0; /* Space around the logo */
+  margin-bottom: 0.5rem; /* Space below the logo */
 }
 
 .team-name {
-  font-size: 1.2rem; /* Name size for better readability */
+  font-size: 1.3rem; /* Slightly larger name size for emphasis */
   font-weight: bold;
   color: #333; /* Darker text color for better contrast */
+  margin-top: 0.5rem; /* Space above the name */
+  white-space: nowrap; /* Prevent text wrapping */
+  overflow: hidden; /* Ensure no overflow for long names */
+  text-overflow: ellipsis; /* Add ellipsis if text overflows */
 }
 
-.scores {
-  font-size: 1.4rem; /* Larger score text for emphasis */
+.team-score {
+  font-size: 2.4rem; /* Larger score text for emphasis */
   font-weight: bold;
   color: #222; /* Darker text color for scores */
-  margin-top: 0.5rem; /* Space above scores */
+  margin: 0 2rem; /* Adjust padding around scores */
 }
 
 .vs {
-  font-size: 1.4rem; /* "VS" text size */
+  font-size: 1.3rem; /* Slightly larger "VS" text size */
   font-weight: bold;
   color: #555; /* Neutral gray for "VS" text */
-  margin: 0 1rem; /* Space around the "VS" */
+  margin: 0 0.5rem; /* Space around the "VS" */
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .match-card {
+    flex-direction: column; /* Switch to vertical layout for mobile */
+    padding: 1.5rem;
+    gap: 1.5rem; /* Space out vertically */
+    align-items: center; /* Center align content on mobile */
+  }
+
+  .vs {
+    margin: 0.5rem 0; /* Adjust margin for vertical layout */
+  }
+
+  .score-container {
+    flex-direction: column; /* Stack score and logo vertically on smaller screens */
+    justify-content: center;
+    gap: 0.5rem; /* Reduce gap on mobile */
+    overflow: visible; /* Allow content expansion */
+  }
+
+  .team-score {
+    font-size: 1.8rem; /* Slightly smaller score size for mobile */
+    margin: 0; /* Remove extra margins on mobile */
+  }
 }

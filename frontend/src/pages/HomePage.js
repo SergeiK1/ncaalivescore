@@ -21,39 +21,38 @@ const HomePage = () => {
 
   return (
     <>
-    <Navbar />
-    <div className="homepage">
-      <div className="column">
-        <SectionTitle title="Men" />
-        {menMatches.map((match, index) => (
-          <MatchCard
-            key={index}
-            team1={match.team1}
-            score1={match.score1}
-            team2={match.team2}
-            score2={match.score2}
-            logo1={`/assets/logos/${match.team1}.png`}
-            logo2={`/assets/logos/${match.team2}.png`}
-          />
-        ))}
+      <Navbar />
+      <div className="homepage">
+        <div className="column">
+          <SectionTitle title="Men" />
+          {menMatches.map((match, index) => (
+            <MatchCard
+              key={index}
+              team1={match.team1}
+              score1={match.score1}
+              team2={match.team2}
+              score2={match.score2}
+              logo1={`/assets/logos/${match.team1}.png`}
+              logo2={`/assets/logos/${match.team2}.png`}
+            />
+          ))}
+        </div>
+        <div className="column">
+          <SectionTitle title="Women" />
+          {womenMatches.map((match, index) => (
+            <MatchCard
+              key={index}
+              team1={match.team1}
+              score1={match.score1}
+              team2={match.team2}
+              score2={match.score2}
+              logo1={`/assets/logos/${match.team1}.png`}
+              logo2={`/assets/logos/${match.team2}.png`}
+            />
+          ))}
+        </div>
       </div>
-      <div className="column">
-        <SectionTitle title="Women" />
-        {womenMatches.map((match, index) => (
-          <MatchCard
-            key={index}
-            team1={match.team1}
-            score1={match.score1}
-            team2={match.team2}
-            score2={match.score2}
-            logo1={`/assets/logos/${match.team1}.png`}
-            logo2={`/assets/logos/${match.team2}.png`}
-          />
-        ))}
-      </div>
-    </div>   
     </>
-    
   );
 };
 
