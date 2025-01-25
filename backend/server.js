@@ -5,6 +5,8 @@ const cors = require("cors");
 const scoreRoutes = require("./routes/scores");
 const schoolRoutes = require("./routes/schools");
 
+
+
 const app = express();
 const PORT = 5000;
 

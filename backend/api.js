@@ -36,7 +36,7 @@ async function readSheet() {
       console.log(valuesFromSheet);
     }
     catch(err) {
-      console.log("readSheet func() error", err);  
+      // console.log("readSheet func() error", err);  
     }
   }
   
