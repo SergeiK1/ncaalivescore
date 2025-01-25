@@ -23,9 +23,10 @@ const schoolTabs = {
   Yale: "Yale!A3:F8",
   UPenn: "UPenn!A3:F8",
   Cornell: "Cornell!A3:C8", // Women-only
-  Brown: "Brown!A3:C8",   // Women-only
+  Brown: "Brown!A3:C8", // Women-only
 };
 
+// Function to fetch data from a specific sheet tab
 async function fetchSheetData(sheetTab) {
   const sheets = google.sheets({ version: "v4", auth: googleAuth });
   const response = await sheets.spreadsheets.values.get({
@@ -35,6 +36,7 @@ async function fetchSheetData(sheetTab) {
   return response.data.values || [];
 }
 
+// Function to generate scores
 async function generateScores() {
   const scores = { men: [], women: [] };
   const matchups = new Map(); // Track processed matchups
@@ -56,9 +58,10 @@ async function generateScores() {
             existingMatchup.score1 !== parseInt(womenScoreOpponent) ||
             existingMatchup.score2 !== parseInt(womenScoreSelf)
           ) {
-            throw new Error(
+            console.error(
               `Score mismatch for matchup ${school} vs ${opponent} in women: ${existingMatchup.score1}-${existingMatchup.score2} vs ${womenScoreSelf}-${womenScoreOpponent}`
             );
+            return; // Skip this record
           }
         } else {
           matchups.set(matchupKey, {
@@ -87,9 +90,10 @@ async function generateScores() {
             existingMatchup.score1 !== parseInt(menScoreOpponent) ||
             existingMatchup.score2 !== parseInt(menScoreSelf)
           ) {
-            throw new Error(
+            console.error(
               `Score mismatch for matchup ${school} vs ${menOpponent} in men: ${existingMatchup.score1}-${existingMatchup.score2} vs ${menScoreSelf}-${menScoreOpponent}`
             );
+            return; // Skip this record
           }
         } else {
           matchups.set(matchupKey, {
@@ -109,8 +113,8 @@ async function generateScores() {
     });
   }
 
-  // Save scores to a file or return them
-  const outputPath = path.join(__dirname, "scores.json");
+  // Save scores to a file
+  const outputPath = path.join(__dirname, "../data/scores.json");
   fs.writeFileSync(outputPath, JSON.stringify(scores, null, 2), "utf-8");
   console.log("Scores generated successfully:", scores);
 }

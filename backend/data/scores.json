@@ -1,0 +1,192 @@
+{
+  "men": [
+    {
+      "team1": "Princeton",
+      "team2": "Columbia",
+      "score1": 15,
+      "score2": 13
+    },
+    {
+      "team1": "Princeton",
+      "team2": "Harvard",
+      "score1": 0,
+      "score2": 0
+    },
+    {
+      "team1": "Princeton",
+      "team2": "Yale",
+      "score1": 0,
+      "score2": 0
+    },
+    {
+      "team1": "Princeton",
+      "team2": "UPenn",
+      "score1": 0,
+      "score2": 0
+    },
+    {
+      "team1": "Columbia",
+      "team2": "Harvard",
+      "score1": 0,
+      "score2": 0
+    },
+    {
+      "team1": "Columbia",
+      "team2": "Yale",
+      "score1": 0,
+      "score2": 0
+    },
+    {
+      "team1": "Columbia",
+      "team2": "UPenn",
+      "score1": 0,
+      "score2": 0
+    },
+    {
+      "team1": "Harvard",
+      "team2": "Yale",
+      "score1": 0,
+      "score2": 0
+    },
+    {
+      "team1": "Harvard",
+      "team2": "UPenn",
+      "score1": 0,
+      "score2": 0
+    },
+    {
+      "team1": "Yale",
+      "team2": "UPenn",
+      "score1": 0,
+      "score2": 0
+    }
+  ],
+  "women": [
+    {
+      "team1": "Princeton",
+      "team2": "Columbia",
+      "score1": 17,
+      "score2": 10
+    },
+    {
+      "team1": "Princeton",
+      "team2": "Harvard",
+      "score1": 0,
+      "score2": 0
+    },
+    {
+      "team1": "Princeton",
+      "team2": "Yale",
+      "score1": 0,
+      "score2": 0
+    },
+    {
+      "team1": "Princeton",
+      "team2": "UPenn",
+      "score1": 0,
+      "score2": 0
+    },
+    {
+      "team1": "Princeton",
+      "team2": "Cornell",
+      "score1": 0,
+      "score2": 0
+    },
+    {
+      "team1": "Princeton",
+      "team2": "Brown",
+      "score1": 0,
+      "score2": 0
+    },
+    {
+      "team1": "Columbia",
+      "team2": "Harvard",
+      "score1": 3,
+      "score2": 6
+    },
+    {
+      "team1": "Columbia",
+      "team2": "Yale",
+      "score1": 0,
+      "score2": 0
+    },
+    {
+      "team1": "Columbia",
+      "team2": "UPenn",
+      "score1": 0,
+      "score2": 0
+    },
+    {
+      "team1": "Columbia",
+      "team2": "Cornell",
+      "score1": 0,
+      "score2": 0
+    },
+    {
+      "team1": "Columbia",
+      "team2": "Brown",
+      "score1": 0,
+      "score2": 0
+    },
+    {
+      "team1": "Harvard",
+      "team2": "Yale",
+      "score1": 0,
+      "score2": 0
+    },
+    {
+      "team1": "Harvard",
+      "team2": "UPenn",
+      "score1": 0,
+      "score2": 0
+    },
+    {
+      "team1": "Harvard",
+      "team2": "Cornell",
+      "score1": 0,
+      "score2": 0
+    },
+    {
+      "team1": "Harvard",
+      "team2": "Brown",
+      "score1": 0,
+      "score2": 0
+    },
+    {
+      "team1": "Yale",
+      "team2": "UPenn",
+      "score1": 0,
+      "score2": 0
+    },
+    {
+      "team1": "Yale",
+      "team2": "Cornell",
+      "score1": 0,
+      "score2": 0
+    },
+    {
+      "team1": "Yale",
+      "team2": "Brown",
+      "score1": 0,
+      "score2": 0
+    },
+    {
+      "team1": "UPenn",
+      "team2": "Cornell",
+      "score1": 0,
+      "score2": 0
+    },
+    {
+      "team1": "UPenn",
+      "team2": "Brown",
+      "score1": 0,
+      "score2": 0
+    },
+    {
+      "team1": "Cornell",
+      "team2": "Brown",
+      "score1": 0,
+      "score2": 0
+    }
+  ]
+}
