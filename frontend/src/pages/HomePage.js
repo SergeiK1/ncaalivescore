@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import MatchCard from "../components/MatchCard";
 import SectionTitle from "../components/SectionTitle";
+import Navbar from "../components/Navbar";
 import { fetchMatchups } from "../utils/api";
 import "../css/HomePage.css";
 
@@ -19,6 +20,8 @@ const HomePage = () => {
   }, []);
 
   return (
+    <>
+    <Navbar />
     <div className="homepage">
       <div className="column">
         <SectionTitle title="Men" />
@@ -48,7 +51,9 @@ const HomePage = () => {
           />
         ))}
       </div>
-    </div>
+    </div>   
+    </>
+    
   );
 };
 
