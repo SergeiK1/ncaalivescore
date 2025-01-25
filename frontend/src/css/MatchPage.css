@@ -1,0 +1,15 @@
+.match-page {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .match-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+  
+  .match-score {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
