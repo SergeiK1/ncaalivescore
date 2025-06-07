@@ -12,7 +12,7 @@ const googleAuth = new google.auth.JWT(
   clientEmail,
   null,
   privateKey.replace(/\\n/g, "\n"),
-  ["https://www.googleapis.com/auth/spreadsheets"]
+  ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
 );
 
 // Define tabs and their ranges
@@ -34,6 +34,38 @@ async function fetchSheetData(sheetTab) {
     range: sheetTab,
   });
   return response.data.values || [];
+}
+
+// Function to watch for changes in the spreadsheet
+async function watchSpreadsheet() {
+  try {
+    const drive = google.drive({ version: 'v3', auth: googleAuth });
+    
+    if (!process.env.WEBHOOK_URL) {
+      console.log('Webhook URL not configured - skipping watch setup');
+      return;
+    }
+    
+    // Set up push notifications
+    const response = await drive.files.watch({
+      fileId: googleSheetId,
+      requestBody: {
+        id: `ncaa-scores-${Date.now()}`, // Unique channel ID
+        type: 'web_hook',
+        address: process.env.WEBHOOK_URL, // Your production webhook URL
+        expiration: Date.now() + 604800000, // 7 days from now
+      },
+    });
+
+    console.log('Watch request successful:', response.data);
+    
+    // Renew the watch request before it expires (e.g., every 6 days)
+    setTimeout(watchSpreadsheet, 518400000); // 6 days in milliseconds
+  } catch (error) {
+    console.error('Error setting up watch:', error);
+    // Retry after 5 minutes if failed
+    setTimeout(watchSpreadsheet, 300000);
+  }
 }
 
 // Function to generate scores
@@ -119,6 +151,7 @@ async function generateScores() {
   console.log("Scores generated successfully:", scores);
 }
 
-generateScores().catch((err) => {
-  console.error("Error generating scores:", err.message);
-});
+module.exports = {
+  generateScores,
+  watchSpreadsheet
+};
