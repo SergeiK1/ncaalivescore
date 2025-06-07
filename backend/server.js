@@ -29,13 +29,54 @@ app.use("/api/scores", scoresRoute);
 
 // Webhook endpoint for Google Sheets notifications
 app.post("/api/webhook", async (req, res) => {
-  console.log("Received webhook notification from Google Sheets");
+  console.log("🔔 Received webhook notification from Google Drive");
+  console.log("Headers:", req.headers);
+  console.log("Body:", req.body);
+  
+  // Validate Google webhook
+  const resourceState = req.headers['x-goog-resource-state'];
+  const channelId = req.headers['x-goog-channel-id'];
+  
+  if (resourceState === 'sync') {
+    console.log("📡 Webhook sync confirmation received");
+    res.status(200).send("Webhook sync confirmed");
+    return;
+  }
+  
+  if (resourceState === 'update' || resourceState === 'exists') {
+    console.log(`🔄 Google Sheets was updated! (State: ${resourceState})`);
+    console.log(`📋 Channel ID: ${channelId}`);
+    
+    try {
+      await generateScores();
+      console.log("✅ Scores updated via webhook!");
+      res.status(200).send("Scores updated successfully via webhook");
+    } catch (error) {
+      console.error("❌ Error updating scores via webhook:", error);
+      res.status(500).send("Error updating scores");
+    }
+  } else {
+    console.log(`ℹ️ Webhook received with state: ${resourceState}`);
+    res.status(200).send("Webhook received");
+  }
+});
+
+// Manual webhook trigger for testing
+app.get("/api/webhook/test", async (req, res) => {
+  console.log("🧪 Manual webhook test triggered");
   try {
     await generateScores();
-    res.status(200).send("Scores updated successfully");
+    res.status(200).json({ 
+      success: true, 
+      message: "Manual update successful",
+      timestamp: new Date().toISOString()
+    });
   } catch (error) {
-    console.error("Error updating scores:", error);
-    res.status(500).send("Error updating scores");
+    console.error("❌ Manual webhook test failed:", error);
+    res.status(500).json({ 
+      success: false, 
+      error: error.message 
+    });
   }
 });
 
@@ -54,12 +95,12 @@ watchSpreadsheet().catch((error) => {
   console.error("Error setting up watch:", error);
 });
 
-// Schedule generateScores.js to run every 5 minutes as backup
+// Schedule generateScores.js to run every 1 minute as backup
 setInterval(() => {
   generateScores().catch((error) => {
     console.error("Error in scheduled score update:", error);
   });
-}, 300000); // 5 minutes in milliseconds
+}, 60000); // 1 minute in milliseconds
 
 // Start the server
 const PORT = process.env.PORT || 5000;

@@ -1,33 +1,96 @@
 .homepage {
   display: flex;
-  justify-content: space-between;
-  gap: 2rem; /* Space between columns */
+  flex-direction: column;
+  gap: 2rem;
   padding: 2rem;
   border-radius: 24px;
-  margin: 0 auto; /* Center align within the page */
-  max-width: 1300px; /* Set a maximum width for the container */
+  margin: 0 auto;
+  max-width: 1300px;
   background-color: rgba(2, 105, 55, 0.1);
-  overflow: hidden; /* Prevent content from spilling outside */
-  box-sizing: border-box; /* Ensure padding/margin is accounted for */
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.refresh-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.refresh-button {
+  background-color: #026937;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.refresh-button:hover:not(:disabled) {
+  background-color: #024d29;
+  transform: translateY(-1px);
+}
+
+.refresh-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.last-updated {
+  font-size: 0.9rem;
+  color: #666;
+  font-style: italic;
+}
+
+.columns-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
 }
 
 .column {
   flex: 1;
-  max-width: 48%; /* Constrain column width to prevent overflow */
+  max-width: 48%;
   display: flex;
   flex-direction: column;
-  gap: 1rem; /* Add spacing between cards */
+  gap: 1rem;
 }
-
 
 @media (max-width: 768px) {
   .homepage {
-    flex-direction: column; /* Switch to vertical layout on mobile */
+    padding: 1rem;
     gap: 1.5rem;
-    max-width: 100%; /* Use full width on smaller screens */
+  }
+
+  .refresh-section {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.75rem;
+  }
+
+  .refresh-button {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  .columns-container {
+    flex-direction: column;
+    gap: 1.5rem;
   }
 
   .column {
-    width: 100%; /* Ensure columns stack on top of each other */
+    max-width: 100%;
   }
 }
