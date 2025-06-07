@@ -13,11 +13,11 @@
 
 .refresh-section {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: white;
   border-radius: 12px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -26,31 +26,54 @@
   background-color: #026937;
   color: white;
   border: none;
-  padding: 0.75rem 1.5rem;
+  padding: 12px 24px;
   border-radius: 8px;
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
 }
 
 .refresh-button:hover:not(:disabled) {
-  background-color: #024d29;
+  background-color: #025529;
   transform: translateY(-1px);
 }
 
 .refresh-button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
-  transform: none;
 }
 
-.last-updated {
+.time-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
   font-size: 0.9rem;
+}
+
+.time-display {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.label {
   color: #666;
+  font-weight: 500;
+}
+
+.time {
+  color: #026937;
+  font-weight: bold;
+  background-color: #f0f8f4;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.auto-refresh-info {
+  color: #888;
+  font-size: 0.8rem;
   font-style: italic;
 }
 
@@ -74,23 +97,21 @@
     gap: 1.5rem;
   }
 
-  .refresh-section {
-    flex-direction: column;
-    gap: 0.5rem;
-    padding: 0.75rem;
-  }
-
-  .refresh-button {
-    padding: 0.6rem 1.2rem;
-    font-size: 0.9rem;
-  }
-
   .columns-container {
     flex-direction: column;
     gap: 1.5rem;
   }
 
   .column {
+    width: 100%;
     max-width: 100%;
+  }
+
+  .refresh-section {
+    padding: 0.75rem;
+  }
+
+  .time-info {
+    font-size: 0.8rem;
   }
 }

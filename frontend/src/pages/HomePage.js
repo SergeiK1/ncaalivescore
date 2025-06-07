@@ -9,6 +9,7 @@ const HomePage = () => {
   const [menMatches, setMenMatches] = useState([]);
   const [womenMatches, setWomenMatches] = useState([]);
   const [lastUpdated, setLastUpdated] = useState(null);
+  const [serverTime, setServerTime] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const getMatchups = async () => {
@@ -18,6 +19,7 @@ const HomePage = () => {
       setMenMatches(data.men || []);
       setWomenMatches(data.women || []);
       setLastUpdated(new Date().toLocaleTimeString());
+      setServerTime(data.lastUpdated ? new Date(data.lastUpdated).toLocaleTimeString() : null);
     } catch (error) {
       console.error("Error fetching matchups:", error);
     } finally {
@@ -28,13 +30,14 @@ const HomePage = () => {
   useEffect(() => {
     getMatchups();
     
-    // Auto-refresh every 30 seconds
-    const interval = setInterval(getMatchups, 30000);
+    // Auto-refresh every 15 seconds for better responsiveness
+    const interval = setInterval(getMatchups, 15000);
     
     return () => clearInterval(interval);
   }, []);
 
   const handleRefresh = () => {
+    console.log('🔄 Manual refresh triggered');
     getMatchups();
   };
 
@@ -48,13 +51,25 @@ const HomePage = () => {
             disabled={isLoading}
             className="refresh-button"
           >
-            {isLoading ? "Updating..." : "🔄 Refresh Scores"}
+            {isLoading ? "🔄 Updating..." : "🔄 Refresh Scores"}
           </button>
-          {lastUpdated && (
-            <span className="last-updated">
-              Last updated: {lastUpdated}
-            </span>
-          )}
+          <div className="time-info">
+            {lastUpdated && (
+              <div className="time-display">
+                <span className="label">Frontend Updated:</span>
+                <span className="time">{lastUpdated}</span>
+              </div>
+            )}
+            {serverTime && (
+              <div className="time-display">
+                <span className="label">Server Data From:</span>
+                <span className="time">{serverTime}</span>
+              </div>
+            )}
+            <div className="auto-refresh-info">
+              Auto-refresh every 15 seconds
+            </div>
+          </div>
         </div>
         
         <div className="columns-container">
