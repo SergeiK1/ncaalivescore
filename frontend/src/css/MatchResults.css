@@ -154,6 +154,31 @@
   font-size: 1.5rem;
 }
 
+/* Mismatch Warning */
+.mismatch-warning {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.warning-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #fed7d7, #feb2b2);
+  color: #c53030;
+  box-shadow: 0 4px 12px rgba(197, 48, 48, 0.2);
+  border: 2px solid #fc8181;
+}
+
+.warning-icon {
+  font-size: 1.3rem;
+}
+
 /* Update Info */
 .update-info {
   display: flex;
@@ -237,14 +262,14 @@
 /* Mobile Responsive */
 @media (max-width: 768px) {
   .results-container {
-    padding: 2rem 1rem;
-    margin: 1rem;
+    padding: 1.5rem 1rem;
+    margin: 0.5rem;
   }
   
   .header-section {
     flex-direction: column;
     text-align: center;
-    gap: 1.5rem;
+    gap: 1rem;
   }
   
   .match-title {
@@ -254,16 +279,74 @@
   .match-card-container .match-card {
     padding: 2rem 1rem;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
   }
   
   .match-card-container .team-logo {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
   }
   
   .match-card-container .team-name {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
+  }
+  
+  .match-card-container .team-score {
+    font-size: 2.2rem;
+  }
+  
+  .match-card-container .score-container {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: center;
+    gap: 1rem;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+  
+  .match-card-container .team {
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+  }
+  
+  .status-badge {
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+  }
+  
+  .time-info {
+    font-size: 0.85rem;
+  }
+  
+  .time-display {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .results-container {
+    padding: 1rem 0.75rem;
+    margin: 0.25rem;
+  }
+  
+  .match-title {
+    font-size: 1.3rem;
+  }
+  
+  .match-card-container .match-card {
+    padding: 1.5rem 0.75rem;
+  }
+  
+  .match-card-container .team-logo {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .match-card-container .team-name {
+    font-size: 1rem;
   }
   
   .match-card-container .team-score {
@@ -271,14 +354,21 @@
   }
   
   .match-card-container .score-container {
-    flex-direction: column;
-    text-align: center;
-    gap: 0.5rem;
+    max-width: 280px;
+    gap: 0.75rem;
   }
   
   .status-badge {
-    font-size: 1rem;
-    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+    padding: 0.6rem 1.2rem;
+  }
+  
+  .warning-badge {
+    font-size: 0.95rem;
+    padding: 0.8rem 1.5rem;
+    flex-wrap: wrap;
+    text-align: center;
+    justify-content: center;
   }
   
   .time-info {

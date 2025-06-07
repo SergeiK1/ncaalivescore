@@ -1,7 +1,7 @@
 .school-selector {
   min-height: 100vh;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  padding: 2rem 1rem;
+  padding: 1rem;
   display: flex;
   justify-content: center;
 }
@@ -11,13 +11,13 @@
   width: 100%;
   background: white;
   border-radius: 24px;
-  padding: 3rem;
+  padding: 2rem;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
 .title {
   text-align: center;
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   font-weight: bold;
   color: #2d3748;
   margin-bottom: 2rem;
@@ -27,25 +27,51 @@
   background-clip: text;
 }
 
-/* Gender Toggle */
+/* Team Selection */
+.team-selection {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 2rem;
+  align-items: start;
+  margin-bottom: 2rem;
+}
+
+.team-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.column-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.column-title {
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0;
+}
+
+/* Inline Gender Toggle */
 .gender-toggle {
   display: flex;
   justify-content: center;
-  margin-bottom: 3rem;
   background: #f7fafc;
-  border-radius: 50px;
-  padding: 8px;
-  width: fit-content;
-  margin-left: auto;
-  margin-right: auto;
+  border-radius: 25px;
+  padding: 4px;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
 }
 
 .toggle-btn {
-  padding: 12px 32px;
+  padding: 8px 20px;
   border: none;
-  border-radius: 50px;
-  font-size: 1.1rem;
+  border-radius: 25px;
+  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -56,8 +82,8 @@
 .toggle-btn.active {
   background: linear-gradient(135deg, #026937, #059e52);
   color: white;
-  box-shadow: 0 4px 12px rgba(2, 105, 55, 0.3);
-  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(2, 105, 55, 0.3);
+  transform: translateY(-1px);
 }
 
 .toggle-btn:hover:not(.active) {
@@ -65,34 +91,11 @@
   background: rgba(255, 255, 255, 0.7);
 }
 
-/* Team Selection */
-.team-selection {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: 3rem;
-  align-items: start;
-  margin-bottom: 3rem;
-}
-
-.team-column {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.column-title {
-  text-align: center;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #2d3748;
-  margin: 0;
-}
-
 /* Selected Team Display */
 .selected-team {
   display: flex;
   justify-content: center;
-  min-height: 120px;
+  min-height: 100px;
   align-items: center;
 }
 
@@ -100,27 +103,27 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
-  padding: 1.5rem;
-  border-radius: 20px;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-radius: 16px;
   background: linear-gradient(135deg, #026937, #059e52);
   color: white;
-  box-shadow: 0 8px 24px rgba(2, 105, 55, 0.3);
-  min-width: 150px;
+  box-shadow: 0 6px 20px rgba(2, 105, 55, 0.3);
+  min-width: 120px;
 }
 
 .team-logo {
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   object-fit: contain;
   border-radius: 50%;
   background: white;
-  padding: 8px;
+  padding: 6px;
 }
 
 .team-name {
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 1rem;
   text-align: center;
 }
 
@@ -128,52 +131,52 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
+  padding: 1rem;
   border: 2px dashed #cbd5e0;
-  border-radius: 20px;
+  border-radius: 16px;
   color: #a0aec0;
-  font-size: 1.1rem;
-  min-width: 150px;
-  min-height: 120px;
+  font-size: 1rem;
+  min-width: 120px;
+  min-height: 100px;
 }
 
 /* School Grid */
 .school-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  gap: 1rem;
-  max-height: 300px;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 0.75rem;
+  max-height: 240px;
   overflow-y: auto;
-  padding: 1rem;
+  padding: 0.75rem;
   background: #f7fafc;
-  border-radius: 16px;
+  border-radius: 12px;
 }
 
 .school-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  padding: 1rem;
-  border-radius: 16px;
+  gap: 0.4rem;
+  padding: 0.75rem;
+  border-radius: 12px;
   background: white;
   cursor: pointer;
   transition: all 0.3s ease;
   border: 2px solid transparent;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
 .school-card:hover:not(.disabled):not(.unavailable) {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
   border-color: #026937;
 }
 
 .school-card.selected {
   background: linear-gradient(135deg, #026937, #059e52);
   color: white;
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(2, 105, 55, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(2, 105, 55, 0.3);
 }
 
 .school-card.unavailable {
@@ -190,73 +193,97 @@
 }
 
 .school-logo {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   object-fit: contain;
   border-radius: 50%;
 }
 
 .school-name {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: 500;
   text-align: center;
+  line-height: 1.2;
 }
 
-/* VS Divider */
+/* VS Divider - Square with Rounded Corners */
 .vs-divider {
   display: flex;
   align-items: center;
   justify-content: center;
   align-self: center;
-  margin-top: 6rem;
+  margin-top: 4rem;
 }
 
 .vs-text {
   background: linear-gradient(135deg, #026937, #059e52);
   color: white;
-  padding: 1rem 1.5rem;
-  border-radius: 50%;
+  padding: 1rem;
+  border-radius: 12px;
   font-weight: bold;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   box-shadow: 0 4px 12px rgba(2, 105, 55, 0.3);
+  min-width: 60px;
+  text-align: center;
 }
 
 /* Action Section */
 .action-section {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   gap: 1rem;
-  flex-wrap: wrap;
 }
 
-.go-button {
+.go-button.primary {
   background: linear-gradient(135deg, #026937, #059e52);
   color: white;
   border: none;
-  padding: 1rem 2rem;
+  padding: 1rem 2.5rem;
   border-radius: 50px;
   font-size: 1.2rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(2, 105, 55, 0.3);
+  order: 1;
 }
 
-.go-button:hover {
+.go-button.primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(2, 105, 55, 0.4);
+}
+
+.view-all-button.secondary {
+  background: linear-gradient(135deg, #4299e1, #3182ce);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 8px rgba(66, 153, 225, 0.3);
+  order: 2;
+}
+
+.view-all-button.secondary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(66, 153, 225, 0.4);
 }
 
 .reset-button {
   background: white;
   color: #718096;
   border: 2px solid #e2e8f0;
-  padding: 1rem 2rem;
-  border-radius: 50px;
-  font-size: 1rem;
+  padding: 0.6rem 1.5rem;
+  border-radius: 25px;
+  font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
+  order: 3;
 }
 
 .reset-button:hover {
@@ -265,37 +292,25 @@
   transform: translateY(-1px);
 }
 
-.view-all-button {
-  background: linear-gradient(135deg, #4299e1, #3182ce);
-  color: white;
-  border: none;
-  padding: 1rem 2rem;
-  border-radius: 50px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
-}
-
-.view-all-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(66, 153, 225, 0.4);
-}
-
 /* Mobile Responsive */
 @media (max-width: 768px) {
   .selector-container {
-    padding: 2rem 1rem;
+    padding: 1.5rem 1rem;
+    margin: 0.5rem;
   }
   
   .title {
-    font-size: 2rem;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
   }
   
   .team-selection {
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 1.5rem;
+  }
+  
+  .column-header {
+    gap: 0.75rem;
   }
   
   .vs-divider {
@@ -312,17 +327,59 @@
   }
   
   .school-grid {
-    grid-template-columns: repeat(3, 1fr);
-    max-height: 200px;
+    grid-template-columns: repeat(4, 1fr);
+    max-height: 180px;
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+  
+  .school-card {
+    padding: 0.5rem;
+  }
+  
+  .school-logo {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .school-name {
+    font-size: 0.7rem;
+  }
+  
+  .team-logo {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .selected-team {
+    min-height: 80px;
+  }
+  
+  .team-card {
+    padding: 0.75rem;
+    min-width: 100px;
+  }
+  
+  .empty-selection {
+    min-height: 80px;
+    min-width: 100px;
+    font-size: 0.9rem;
   }
   
   .action-section {
-    flex-direction: column;
-    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1rem;
   }
   
-  .go-button, .reset-button {
+  .go-button.primary,
+  .view-all-button.secondary,
+  .reset-button {
     width: 100%;
-    max-width: 300px;
+    max-width: 280px;
+  }
+  
+  .toggle-btn {
+    padding: 6px 16px;
+    font-size: 0.85rem;
   }
 } 

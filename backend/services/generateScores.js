@@ -120,85 +120,107 @@ async function generateScores() {
     console.log('🔄 Updating scores from Google Sheets...');
     
     const scores = { men: [], women: [] };
-    const matchups = new Map(); // Track processed matchups
-
+    const rawMatches = { men: [], women: [] }; // Store all raw matches first
+    
+    // First pass: collect all matches from all schools
     for (const [school, range] of Object.entries(schoolTabs)) {
       const sheetData = await fetchSheetData(range);
 
       sheetData.forEach((row) => {
         const [opponent, womenScoreSelf, womenScoreOpponent, menOpponent, menScoreSelf, menScoreOpponent] = row;
 
-        // Women
-        if (womenScoreSelf !== undefined && womenScoreOpponent !== undefined) {
-          const matchupKey = `women:${school}-${opponent}`;
-          const reverseMatchupKey = `women:${opponent}-${school}`;
-
-          if (matchups.has(reverseMatchupKey)) {
-            const existingMatchup = matchups.get(reverseMatchupKey);
-            if (
-              existingMatchup.score1 !== parseInt(womenScoreOpponent) ||
-              existingMatchup.score2 !== parseInt(womenScoreSelf)
-            ) {
-              console.error(
-                `Score mismatch for matchup ${school} vs ${opponent} in women: ${existingMatchup.score1}-${existingMatchup.score2} vs ${womenScoreSelf}-${womenScoreOpponent}`
-              );
-              return; // Skip this record
-            }
-          } else {
-            matchups.set(matchupKey, {
-              team1: school,
-              team2: opponent,
-              score1: parseInt(womenScoreSelf),
-              score2: parseInt(womenScoreOpponent),
-            });
-            scores.women.push({
-              team1: school,
-              team2: opponent,
-              score1: parseInt(womenScoreSelf),
-              score2: parseInt(womenScoreOpponent),
-            });
-          }
+        // Women's matches
+        if (womenScoreSelf !== undefined && womenScoreOpponent !== undefined && opponent) {
+          rawMatches.women.push({
+            reportingTeam: school,
+            opponent: opponent,
+            selfScore: parseInt(womenScoreSelf) || 0,
+            opponentScore: parseInt(womenScoreOpponent) || 0
+          });
         }
 
-        // Men
-        if (menScoreSelf !== undefined && menScoreOpponent !== undefined) {
-          const matchupKey = `men:${school}-${menOpponent}`;
-          const reverseMatchupKey = `men:${menOpponent}-${school}`;
-
-          if (matchups.has(reverseMatchupKey)) {
-            const existingMatchup = matchups.get(reverseMatchupKey);
-            if (
-              existingMatchup.score1 !== parseInt(menScoreOpponent) ||
-              existingMatchup.score2 !== parseInt(menScoreSelf)
-            ) {
-              console.error(
-                `Score mismatch for matchup ${school} vs ${menOpponent} in men: ${existingMatchup.score1}-${existingMatchup.score2} vs ${menScoreSelf}-${menScoreOpponent}`
-              );
-              return; // Skip this record
-            }
-          } else {
-            matchups.set(matchupKey, {
-              team1: school,
-              team2: menOpponent,
-              score1: parseInt(menScoreSelf),
-              score2: parseInt(menScoreOpponent),
-            });
-            scores.men.push({
-              team1: school,
-              team2: menOpponent,
-              score1: parseInt(menScoreSelf),
-              score2: parseInt(menScoreOpponent),
-            });
-          }
+        // Men's matches  
+        if (menScoreSelf !== undefined && menScoreOpponent !== undefined && menOpponent) {
+          rawMatches.men.push({
+            reportingTeam: school,
+            opponent: menOpponent,
+            selfScore: parseInt(menScoreSelf) || 0,
+            opponentScore: parseInt(menScoreOpponent) || 0
+          });
         }
       });
     }
+
+    // Second pass: validate matches and create final scores
+    const processedMatches = new Set();
+
+    ['men', 'women'].forEach(gender => {
+      rawMatches[gender].forEach(match => {
+        const matchKey = [match.reportingTeam, match.opponent].sort().join('-');
+        
+        if (processedMatches.has(`${gender}-${matchKey}`)) {
+          return; // Already processed this matchup
+        }
+
+        // Find the corresponding match from the opponent's perspective
+        const counterMatch = rawMatches[gender].find(m => 
+          m.reportingTeam === match.opponent && m.opponent === match.reportingTeam
+        );
+
+        let finalMatch = {
+          team1: match.reportingTeam,
+          team2: match.opponent,
+          score1: match.selfScore,
+          score2: match.opponentScore,
+          hasMismatch: false
+        };
+
+        if (counterMatch) {
+          // Check if scores align (match.selfScore should equal counterMatch.opponentScore)
+          const scoresAlign = (
+            match.selfScore === counterMatch.opponentScore &&
+            match.opponentScore === counterMatch.selfScore
+          );
+
+          if (!scoresAlign) {
+            console.warn(
+              `⚠️ Score mismatch in ${gender}: ${match.reportingTeam} reports ${match.selfScore}-${match.opponentScore} vs ${match.opponent}, but ${match.opponent} reports ${counterMatch.selfScore}-${counterMatch.opponentScore} vs ${match.reportingTeam}`
+            );
+            finalMatch.hasMismatch = true;
+            
+            // Use the match from alphabetically first team as primary source
+            if (match.opponent < match.reportingTeam) {
+              finalMatch = {
+                team1: counterMatch.reportingTeam,
+                team2: counterMatch.opponent,
+                score1: counterMatch.selfScore,
+                score2: counterMatch.opponentScore,
+                hasMismatch: true
+              };
+            }
+          }
+        } else {
+          // Only one team reported this match
+          console.log(`ℹ️ Only ${match.reportingTeam} reported match vs ${match.opponent} in ${gender}`);
+        }
+
+        scores[gender].push(finalMatch);
+        processedMatches.add(`${gender}-${matchKey}`);
+      });
+    });
 
     // Save scores to a file
     const outputPath = path.join(__dirname, "../data/scores.json");
     fs.writeFileSync(outputPath, JSON.stringify(scores, null, 2), "utf-8");
     console.log("✅ Scores updated successfully!");
     console.log(`📈 Men's matches: ${scores.men.length}, Women's matches: ${scores.women.length}`);
+    
+    // Log any mismatches found
+    const menMismatches = scores.men.filter(m => m.hasMismatch).length;
+    const womenMismatches = scores.women.filter(m => m.hasMismatch).length;
+    if (menMismatches > 0 || womenMismatches > 0) {
+      console.log(`⚠️ Mismatches detected - Men: ${menMismatches}, Women: ${womenMismatches}`);
+    }
     
     return scores;
   } catch (error) {

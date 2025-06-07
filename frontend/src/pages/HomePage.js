@@ -68,7 +68,7 @@ const AllMatches = () => {
               </div>
             )}
             <div className="auto-refresh-info">
-              Auto-refresh every 30 seconds
+              Auto-refresh every 2 minutes
             </div>
           </div>
         </div>
@@ -83,6 +83,7 @@ const AllMatches = () => {
                 score1={match.score1}
                 team2={match.team2}
                 score2={match.score2}
+                hasMismatch={match.hasMismatch}
                 logo1={`/assets/logos/${match.team1}.png`}
                 logo2={`/assets/logos/${match.team2}.png`}
               />
@@ -97,6 +98,7 @@ const AllMatches = () => {
                 score1={match.score1}
                 team2={match.team2}
                 score2={match.score2}
+                hasMismatch={match.hasMismatch}
                 logo1={`/assets/logos/${match.team1}.png`}
                 logo2={`/assets/logos/${match.team2}.png`}
               />

@@ -65,32 +65,33 @@ const SchoolSelector = () => {
         <div className="selector-container">
           <h1 className="title">Select Teams</h1>
           
-          {/* Gender Toggle */}
-          <div className="gender-toggle">
-            <button
-              className={`toggle-btn ${selectedGender === "men" ? "active" : ""}`}
-              onClick={() => {
-                setSelectedGender("men");
-                resetSelection();
-              }}
-            >
-              Men's
-            </button>
-            <button
-              className={`toggle-btn ${selectedGender === "women" ? "active" : ""}`}
-              onClick={() => {
-                setSelectedGender("women");
-                resetSelection();
-              }}
-            >
-              Women's
-            </button>
-          </div>
-
-          {/* Team Selection */}
+          {/* Team Selection with Inline Gender Toggle */}
           <div className="team-selection">
             <div className="team-column">
-              <h3 className="column-title">First Team</h3>
+              <div className="column-header">
+                <h3 className="column-title">First Team</h3>
+                {/* Gender Toggle */}
+                <div className="gender-toggle">
+                  <button
+                    className={`toggle-btn ${selectedGender === "men" ? "active" : ""}`}
+                    onClick={() => {
+                      setSelectedGender("men");
+                      resetSelection();
+                    }}
+                  >
+                    Men's
+                  </button>
+                  <button
+                    className={`toggle-btn ${selectedGender === "women" ? "active" : ""}`}
+                    onClick={() => {
+                      setSelectedGender("women");
+                      resetSelection();
+                    }}
+                  >
+                    Women's
+                  </button>
+                </div>
+              </div>
               <div className="selected-team">
                 {team1 ? (
                   <div className="team-card selected">
@@ -126,7 +127,9 @@ const SchoolSelector = () => {
             </div>
 
             <div className="team-column">
-              <h3 className="column-title">Second Team</h3>
+              <div className="column-header">
+                <h3 className="column-title">Second Team</h3>
+              </div>
               <div className="selected-team">
                 {team2 ? (
                   <div className="team-card selected">
@@ -158,24 +161,24 @@ const SchoolSelector = () => {
             </div>
           </div>
 
-          {/* Go Button */}
+          {/* Action Buttons */}
           <div className="action-section">
             {team1 && team2 && (
-              <button className="go-button" onClick={handleGo}>
-                🏆 View Match Results
+              <button className="go-button primary" onClick={handleGo}>
+                View Match Results
               </button>
             )}
+            <button 
+              className="view-all-button secondary" 
+              onClick={() => navigate("/all-matches")}
+            >
+              View All Matches
+            </button>
             {(team1 || team2) && (
               <button className="reset-button" onClick={resetSelection}>
                 Reset Selection
               </button>
             )}
-            <button 
-              className="view-all-button" 
-              onClick={() => navigate("/all-matches")}
-            >
-              📋 View All Matches
-            </button>
           </div>
         </div>
       </div>

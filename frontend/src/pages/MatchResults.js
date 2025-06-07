@@ -131,12 +131,22 @@ const MatchResults = () => {
                 score1={matchData.score1}
                 team2={matchData.team2}
                 score2={matchData.score2}
+                hasMismatch={matchData.hasMismatch}
                 logo1={`/assets/logos/${matchData.team1}.png`}
                 logo2={`/assets/logos/${matchData.team2}.png`}
               />
             </div>
 
-            {winnerStatus !== "upcoming" && (
+            {matchData.hasMismatch && (
+              <div className="mismatch-warning">
+                <div className="warning-badge">
+                  <span className="warning-icon">⚠️</span>
+                  <span>Score discrepancy detected between team reports</span>
+                </div>
+              </div>
+            )}
+
+            {winnerStatus !== "upcoming" && !matchData.hasMismatch && (
               <div className="match-status">
                 {winnerStatus === "tie" ? (
                   <div className="status-badge tie">
@@ -154,7 +164,7 @@ const MatchResults = () => {
               </div>
             )}
 
-            {winnerStatus === "upcoming" && (
+            {winnerStatus === "upcoming" && !matchData.hasMismatch && (
               <div className="match-status">
                 <div className="status-badge upcoming">
                   <span className="status-icon">⏳</span>
@@ -179,7 +189,7 @@ const MatchResults = () => {
                 </div>
               )}
               <div className="auto-refresh-info">
-                Auto-refresh every 30 seconds
+                Auto-refresh every 2 minutes
               </div>
             </div>
           </div>

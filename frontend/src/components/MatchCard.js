@@ -3,7 +3,7 @@ import "../css/MatchCard.css";
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
-const MatchCard = ({ team1, score1, team2, score2 }) => {
+const MatchCard = ({ team1, score1, team2, score2, hasMismatch }) => {
   const logoBaseURL = `${API_URL}/assets/logos`;
 
   // Construct URLs for team logos
@@ -11,7 +11,14 @@ const MatchCard = ({ team1, score1, team2, score2 }) => {
   const logo2 = `${logoBaseURL}/${team2}.png`;
 
   return (
-    <div className="match-card">
+    <div className={`match-card ${hasMismatch ? 'has-mismatch' : ''}`}>
+      {/* Mismatch Indicator */}
+      {hasMismatch && (
+        <div className="mismatch-indicator" title="Score discrepancy detected between team reports">
+          <span className="mismatch-asterisk">*</span>
+        </div>
+      )}
+      
       {/* Team 1 Section */}
       <div className="score-container">
         <div className="team">
