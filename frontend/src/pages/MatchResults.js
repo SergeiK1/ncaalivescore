@@ -16,13 +16,13 @@ const MatchResults = () => {
 
   // School colors for backgrounds
   const schoolColors = {
-    Princeton: { primary: '#FF8F00', secondary: '#000000', bg: 'rgba(255, 143, 0, 0.15)' },
-    Harvard: { primary: '#A51C30', secondary: '#FFFFFF', bg: 'rgba(165, 28, 48, 0.15)' },
-    Yale: { primary: '#00356B', secondary: '#FFFFFF', bg: 'rgba(0, 53, 107, 0.15)' },
-    Columbia: { primary: '#B9D9EB', secondary: '#002B7F', bg: 'rgba(0, 43, 127, 0.15)' },
-    UPenn: { primary: '#011F5B', secondary: '#990000', bg: 'rgba(1, 31, 91, 0.15)' },
-    Cornell: { primary: '#B31B1B', secondary: '#FFFFFF', bg: 'rgba(179, 27, 27, 0.15)' },
-    Brown: { primary: '#8B4513', secondary: '#FFFFFF', bg: 'rgba(139, 69, 19, 0.15)' }
+    Princeton: { primary: '#FF8F00', secondary: '#000000', bg: 'rgba(255, 143, 0, 0.15)', glow: '#FF8F00' },
+    Harvard: { primary: '#A51C30', secondary: '#FFFFFF', bg: 'rgba(165, 28, 48, 0.15)', glow: '#A51C30' },
+    Yale: { primary: '#00356B', secondary: '#FFFFFF', bg: 'rgba(0, 53, 107, 0.15)', glow: '#00356B' },
+    Columbia: { primary: '#B9D9EB', secondary: '#002B7F', bg: 'rgba(0, 43, 127, 0.15)', glow: '#002B7F' },
+    UPenn: { primary: '#011F5B', secondary: '#990000', bg: 'rgba(1, 31, 91, 0.15)', glow: '#011F5B' },
+    Cornell: { primary: '#B31B1B', secondary: '#FFFFFF', bg: 'rgba(179, 27, 27, 0.15)', glow: '#B31B1B' },
+    Brown: { primary: '#8B4513', secondary: '#FFFFFF', bg: 'rgba(139, 69, 19, 0.15)', glow: '#8B4513' }
   };
 
   const getMatchData = useCallback(async () => {
@@ -152,15 +152,6 @@ const MatchResults = () => {
             <div className="match-title">
               {gender.charAt(0).toUpperCase() + gender.slice(1)}'s Fencing Championship
             </div>
-            {winnerStatus !== "upcoming" && (
-              <div className="winner-announcement">
-                {winnerStatus === "tie" ? (
-                  <span>Tie Game!</span>
-                ) : (
-                  <span>{winnerStatus === "team1" ? matchData.team1 : matchData.team2} Wins!</span>
-                )}
-              </div>
-            )}
             {matchData.hasMismatch && (
               <div className="mismatch-warning">
                 Score Discrepancy Detected
@@ -171,8 +162,11 @@ const MatchResults = () => {
           <div className="teams-comparison">
             {/* Team 1 */}
             <div 
-              className="team-display team-left"
-              style={{ backgroundColor: team1Colors.bg }}
+              className={`team-display ${winnerStatus === "team1" ? "winner-glow" : ""}`}
+              style={{ 
+                backgroundColor: team1Colors.bg,
+                '--glow-color': team1Colors.glow
+              }}
             >
               <div className="team-info">
                 <img 
@@ -184,7 +178,12 @@ const MatchResults = () => {
               </div>
               
               <div className="score-display">
-                <div className="main-score">{matchData.score1}</div>
+                <div className="score-container">
+                  <div className="main-score">{matchData.score1}</div>
+                  {winnerStatus === "team1" && (
+                    <div className="winner-badge">🏆 WINS!</div>
+                  )}
+                </div>
                 <div className="progress-container">
                   <div className="progress-bar">
                     <div 
@@ -218,14 +217,22 @@ const MatchResults = () => {
               </div>
             </div>
 
-            <div className="vs-divider">
-              <div className="vs-text">VS</div>
+            <div className="vs-section">
+              <div className="vs-content">
+                <div className="vs-text">VS</div>
+                {winnerStatus === "tie" && (
+                  <div className="tie-announcement">TIE GAME</div>
+                )}
+              </div>
             </div>
 
             {/* Team 2 */}
             <div 
-              className="team-display team-right"
-              style={{ backgroundColor: team2Colors.bg }}
+              className={`team-display ${winnerStatus === "team2" ? "winner-glow" : ""}`}
+              style={{ 
+                backgroundColor: team2Colors.bg,
+                '--glow-color': team2Colors.glow
+              }}
             >
               <div className="team-info">
                 <img 
@@ -237,7 +244,12 @@ const MatchResults = () => {
               </div>
               
               <div className="score-display">
-                <div className="main-score">{matchData.score2}</div>
+                <div className="score-container">
+                  <div className="main-score">{matchData.score2}</div>
+                  {winnerStatus === "team2" && (
+                    <div className="winner-badge">🏆 WINS!</div>
+                  )}
+                </div>
                 <div className="progress-container">
                   <div className="progress-bar">
                     <div 
