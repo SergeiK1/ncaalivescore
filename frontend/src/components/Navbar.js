@@ -1,8 +1,10 @@
 import React from "react";
 import "../css/Navbar.css";
 
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 const Navbar = () => {
-  const logoBaseURL = "http://localhost:5000/assets/logos";
+  const logoBaseURL = `${API_URL}/assets/logos`;
   const logoURL = `${logoBaseURL}/MainLogo.png`;
 
   return (

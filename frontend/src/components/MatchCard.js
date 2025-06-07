@@ -1,8 +1,10 @@
 import React from "react";
 import "../css/MatchCard.css";
 
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 const MatchCard = ({ team1, score1, team2, score2 }) => {
-  const logoBaseURL = "http://localhost:5000/assets/logos";
+  const logoBaseURL = `${API_URL}/assets/logos`;
 
   // Construct URLs for team logos
   const logo1 = `${logoBaseURL}/${team1}.png`;
