@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
+import Header from "../components/Header";
 import MatchCard from "../components/MatchCard";
 import { fetchMatchups } from "../utils/api";
 import "../css/MatchResults.css";
@@ -82,7 +82,7 @@ const MatchResults = () => {
   if (loading) {
     return (
       <>
-        <Navbar />
+        <Header />
         <div className="match-results">
           <div className="loading-container">
             <div className="loading-spinner"></div>
@@ -96,7 +96,7 @@ const MatchResults = () => {
   if (!matchData) {
     return (
       <>
-        <Navbar />
+        <Header />
         <div className="match-results">
           <div className="error-container">
             <h2>Match Not Found</h2>
@@ -112,7 +112,7 @@ const MatchResults = () => {
 
   return (
     <>
-      <Navbar />
+      <Header />
       <div className="match-results">
         <div className="results-container">
           <div className="header-section">

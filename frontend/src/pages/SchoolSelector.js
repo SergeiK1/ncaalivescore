@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
+import Header from "../components/Header";
 import "../css/SchoolSelector.css";
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
@@ -60,7 +60,7 @@ const SchoolSelector = () => {
 
   return (
     <>
-      <Navbar />
+      <Header />
       <div className="school-selector">
         <div className="selector-container">
           <h1 className="title">Select Teams</h1>
