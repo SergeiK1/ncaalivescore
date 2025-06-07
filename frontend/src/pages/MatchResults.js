@@ -4,6 +4,8 @@ import Header from "../components/Header";
 import { fetchMatchups } from "../utils/api";
 import "../css/MatchResults.css";
 
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 const MatchResults = () => {
   const { gender, team1, team2 } = useParams();
   const navigate = useNavigate();
@@ -14,13 +16,13 @@ const MatchResults = () => {
 
   // School colors for backgrounds
   const schoolColors = {
-    Princeton: { primary: '#FF8F00', secondary: '#000000', bg: 'rgba(255, 143, 0, 0.05)' },
-    Harvard: { primary: '#A51C30', secondary: '#FFFFFF', bg: 'rgba(165, 28, 48, 0.05)' },
-    Yale: { primary: '#00356B', secondary: '#FFFFFF', bg: 'rgba(0, 53, 107, 0.05)' },
-    Columbia: { primary: '#B9D9EB', secondary: '#002B7F', bg: 'rgba(0, 43, 127, 0.05)' },
-    UPenn: { primary: '#011F5B', secondary: '#990000', bg: 'rgba(1, 31, 91, 0.05)' },
-    Cornell: { primary: '#B31B1B', secondary: '#FFFFFF', bg: 'rgba(179, 27, 27, 0.05)' },
-    Brown: { primary: '#8B4513', secondary: '#FFFFFF', bg: 'rgba(139, 69, 19, 0.05)' }
+    Princeton: { primary: '#FF8F00', secondary: '#000000', bg: 'rgba(255, 143, 0, 0.15)' },
+    Harvard: { primary: '#A51C30', secondary: '#FFFFFF', bg: 'rgba(165, 28, 48, 0.15)' },
+    Yale: { primary: '#00356B', secondary: '#FFFFFF', bg: 'rgba(0, 53, 107, 0.15)' },
+    Columbia: { primary: '#B9D9EB', secondary: '#002B7F', bg: 'rgba(0, 43, 127, 0.15)' },
+    UPenn: { primary: '#011F5B', secondary: '#990000', bg: 'rgba(1, 31, 91, 0.15)' },
+    Cornell: { primary: '#B31B1B', secondary: '#FFFFFF', bg: 'rgba(179, 27, 27, 0.15)' },
+    Brown: { primary: '#8B4513', secondary: '#FFFFFF', bg: 'rgba(139, 69, 19, 0.15)' }
   };
 
   const getMatchData = useCallback(async () => {
@@ -145,127 +147,125 @@ const MatchResults = () => {
           ← Back
         </button>
 
-        <div className="match-container">
-          {/* Team 1 Section */}
-          <div 
-            className="team-section team-left"
-            style={{ backgroundColor: team1Colors.bg }}
-          >
-            <div className="team-header">
-              <img 
-                src={`/assets/logos/${matchData.team1}.png`} 
-                alt={`${matchData.team1} logo`}
-                className="team-logo-large"
-              />
-              <h1 className="team-name-large">{matchData.team1}</h1>
+        <div className="unified-match-layout">
+          <div className="match-header">
+            <div className="match-title">
+              {gender.charAt(0).toUpperCase() + gender.slice(1)}'s Fencing Championship
             </div>
-            
-            <div className="score-section">
-              <div className="aggregate-score">{matchData.score1}</div>
+            {winnerStatus !== "upcoming" && (
+              <div className="winner-announcement">
+                {winnerStatus === "tie" ? (
+                  <span>Tie Game!</span>
+                ) : (
+                  <span>{winnerStatus === "team1" ? matchData.team1 : matchData.team2} Wins!</span>
+                )}
+              </div>
+            )}
+            {matchData.hasMismatch && (
+              <div className="mismatch-warning">
+                Score Discrepancy Detected
+              </div>
+            )}
+          </div>
+
+          <div className="teams-comparison">
+            {/* Team 1 */}
+            <div 
+              className="team-display team-left"
+              style={{ backgroundColor: team1Colors.bg }}
+            >
+              <div className="team-info">
+                <img 
+                  src={`${API_URL}/assets/logos/${matchData.team1}.png`} 
+                  alt={`${matchData.team1} logo`}
+                  className="team-logo"
+                />
+                <h1 className="team-name">{matchData.team1}</h1>
+              </div>
               
-              <div className="progress-bar-container">
-                <div className="progress-label">Progress to Victory</div>
-                <div className="progress-bar">
-                  <div 
-                    className="progress-fill team1-fill"
-                    style={{ 
-                      width: `${getProgressPercentage(matchData.score1)}%`,
-                      backgroundColor: team1Colors.primary
-                    }}
-                  ></div>
+              <div className="score-display">
+                <div className="main-score">{matchData.score1}</div>
+                <div className="progress-container">
+                  <div className="progress-bar">
+                    <div 
+                      className="progress-fill"
+                      style={{ 
+                        width: `${getProgressPercentage(matchData.score1)}%`,
+                        backgroundColor: team1Colors.primary
+                      }}
+                    ></div>
+                  </div>
                   <div className="progress-text">{Math.min(matchData.score1, 14)}/14</div>
                 </div>
               </div>
-              
-              <div className="score-breakdown">
-                <h3>Score Breakdown</h3>
+
+              <div className="weapon-breakdown">
+                <div className="breakdown-title">Score Breakdown</div>
                 <div className="weapon-scores">
-                  <div className="weapon-score">
-                    <span className="weapon-name">⚔️ Epee</span>
-                    <span className="weapon-points">{matchData.breakdown1?.epee || 0}</span>
+                  <div className="weapon-row">
+                    <span className="weapon">Epee</span>
+                    <span className="points">{matchData.breakdown1?.epee || 0}</span>
                   </div>
-                  <div className="weapon-score">
-                    <span className="weapon-name">🗡️ Foil</span>
-                    <span className="weapon-points">{matchData.breakdown1?.foil || 0}</span>
+                  <div className="weapon-row">
+                    <span className="weapon">Foil</span>
+                    <span className="points">{matchData.breakdown1?.foil || 0}</span>
                   </div>
-                  <div className="weapon-score">
-                    <span className="weapon-name">⚔️ Saber</span>
-                    <span className="weapon-points">{matchData.breakdown1?.saber || 0}</span>
+                  <div className="weapon-row">
+                    <span className="weapon">Saber</span>
+                    <span className="points">{matchData.breakdown1?.saber || 0}</span>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* VS Section */}
-          <div className="vs-section">
-            <div className="vs-content">
-              <div className="match-title">
-                {gender.charAt(0).toUpperCase() + gender.slice(1)}'s Fencing
-              </div>
+            <div className="vs-divider">
               <div className="vs-text">VS</div>
-              {winnerStatus !== "upcoming" && (
-                <div className="winner-badge">
-                  {winnerStatus === "tie" ? (
-                    <span>🤝 Tie Game!</span>
-                  ) : (
-                    <span>🏆 {winnerStatus === "team1" ? matchData.team1 : matchData.team2} Wins!</span>
-                  )}
-                </div>
-              )}
-              {matchData.hasMismatch && (
-                <div className="mismatch-badge">
-                  ⚠️ Score Discrepancy
-                </div>
-              )}
             </div>
-          </div>
 
-          {/* Team 2 Section */}
-          <div 
-            className="team-section team-right"
-            style={{ backgroundColor: team2Colors.bg }}
-          >
-            <div className="team-header">
-              <img 
-                src={`/assets/logos/${matchData.team2}.png`} 
-                alt={`${matchData.team2} logo`}
-                className="team-logo-large"
-              />
-              <h1 className="team-name-large">{matchData.team2}</h1>
-            </div>
-            
-            <div className="score-section">
-              <div className="aggregate-score">{matchData.score2}</div>
+            {/* Team 2 */}
+            <div 
+              className="team-display team-right"
+              style={{ backgroundColor: team2Colors.bg }}
+            >
+              <div className="team-info">
+                <img 
+                  src={`${API_URL}/assets/logos/${matchData.team2}.png`} 
+                  alt={`${matchData.team2} logo`}
+                  className="team-logo"
+                />
+                <h1 className="team-name">{matchData.team2}</h1>
+              </div>
               
-              <div className="progress-bar-container">
-                <div className="progress-label">Progress to Victory</div>
-                <div className="progress-bar">
-                  <div 
-                    className="progress-fill team2-fill"
-                    style={{ 
-                      width: `${getProgressPercentage(matchData.score2)}%`,
-                      backgroundColor: team2Colors.primary
-                    }}
-                  ></div>
+              <div className="score-display">
+                <div className="main-score">{matchData.score2}</div>
+                <div className="progress-container">
+                  <div className="progress-bar">
+                    <div 
+                      className="progress-fill"
+                      style={{ 
+                        width: `${getProgressPercentage(matchData.score2)}%`,
+                        backgroundColor: team2Colors.primary
+                      }}
+                    ></div>
+                  </div>
                   <div className="progress-text">{Math.min(matchData.score2, 14)}/14</div>
                 </div>
               </div>
-              
-              <div className="score-breakdown">
-                <h3>Score Breakdown</h3>
+
+              <div className="weapon-breakdown">
+                <div className="breakdown-title">Score Breakdown</div>
                 <div className="weapon-scores">
-                  <div className="weapon-score">
-                    <span className="weapon-name">⚔️ Epee</span>
-                    <span className="weapon-points">{matchData.breakdown2?.epee || 0}</span>
+                  <div className="weapon-row">
+                    <span className="weapon">Epee</span>
+                    <span className="points">{matchData.breakdown2?.epee || 0}</span>
                   </div>
-                  <div className="weapon-score">
-                    <span className="weapon-name">🗡️ Foil</span>
-                    <span className="weapon-points">{matchData.breakdown2?.foil || 0}</span>
+                  <div className="weapon-row">
+                    <span className="weapon">Foil</span>
+                    <span className="points">{matchData.breakdown2?.foil || 0}</span>
                   </div>
-                  <div className="weapon-score">
-                    <span className="weapon-name">⚔️ Saber</span>
-                    <span className="weapon-points">{matchData.breakdown2?.saber || 0}</span>
+                  <div className="weapon-row">
+                    <span className="weapon">Saber</span>
+                    <span className="points">{matchData.breakdown2?.saber || 0}</span>
                   </div>
                 </div>
               </div>
@@ -273,20 +273,15 @@ const MatchResults = () => {
           </div>
         </div>
 
-        {/* Footer */}
         <footer className="match-footer">
           <div className="update-info">
             {lastUpdated && (
-              <span className="update-time">
-                Last Updated: {lastUpdated}
-              </span>
+              <span>Last Updated: {lastUpdated}</span>
             )}
             {serverTime && (
-              <span className="server-time">
-                | Server Data: {serverTime}
-              </span>
+              <span> | Server: {serverTime}</span>
             )}
-            <span className="auto-refresh">| Auto-refresh: 30s</span>
+            <span> | Auto-refresh: 30s</span>
           </div>
         </footer>
       </div>
