@@ -7,7 +7,11 @@ const Header = () => {
     <header className="minimalist-header">
       <Link to="/" className="brand-link">
         <div className="brand-container">
-          <div className="ivy-symbol">🎯</div>
+          <img 
+            src="/ivy-fencing-logo.svg" 
+            alt="Ivy League Fencing Logo" 
+            className="ivy-logo"
+          />
           <span className="brand-name">Ivy Live Score</span>
         </div>
       </Link>
