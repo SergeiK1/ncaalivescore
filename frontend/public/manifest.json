@@ -13,8 +13,8 @@
       "type": "image/x-icon"
     },
     {
-      "src": "ivy-fencing-logo.svg",
-      "type": "image/svg+xml",
+      "src": "logo.png",
+      "type": "image/png",
       "sizes": "192x192"
     }
   ],

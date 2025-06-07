@@ -8,7 +8,7 @@ const Header = () => {
       <Link to="/" className="brand-link">
         <div className="brand-container">
           <img 
-            src="/ivy-fencing-logo.svg" 
+            src="/logo.png" 
             alt="Ivy League Fencing Logo" 
             className="ivy-logo"
           />
