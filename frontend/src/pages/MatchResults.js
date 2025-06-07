@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import MatchCard from "../components/MatchCard";
@@ -13,32 +13,32 @@ const MatchResults = () => {
   const [lastUpdated, setLastUpdated] = useState(null);
   const [serverTime, setServerTime] = useState(null);
 
-  const findMatchData = (data) => {
-    const matches = gender === "men" ? data.men : data.women;
-    
-    // Look for the match in both directions (team1 vs team2 or team2 vs team1)
-    let match = matches.find(
-      (m) => 
-        (m.team1 === team1 && m.team2 === team2) ||
-        (m.team1 === team2 && m.team2 === team1)
-    );
+  const getMatchData = useCallback(async () => {
+    const findMatchData = (data) => {
+      const matches = gender === "men" ? data.men : data.women;
+      
+      // Look for the match in both directions (team1 vs team2 or team2 vs team1)
+      let match = matches.find(
+        (m) => 
+          (m.team1 === team1 && m.team2 === team2) ||
+          (m.team1 === team2 && m.team2 === team1)
+      );
 
-    if (match) {
-      // Ensure the match is in the correct order (team1 vs team2)
-      if (match.team1 === team2 && match.team2 === team1) {
-        match = {
-          team1: match.team2,
-          team2: match.team1,
-          score1: match.score2,
-          score2: match.score1
-        };
+      if (match) {
+        // Ensure the match is in the correct order (team1 vs team2)
+        if (match.team1 === team2 && match.team2 === team1) {
+          match = {
+            team1: match.team2,
+            team2: match.team1,
+            score1: match.score2,
+            score2: match.score1
+          };
+        }
       }
-    }
 
-    return match;
-  };
+      return match;
+    };
 
-  const getMatchData = async () => {
     try {
       const data = await fetchMatchups();
       const match = findMatchData(data);
@@ -50,7 +50,7 @@ const MatchResults = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [gender, team1, team2]);
 
   useEffect(() => {
     getMatchData();
@@ -59,14 +59,14 @@ const MatchResults = () => {
     const interval = setInterval(getMatchData, 30000);
     
     return () => clearInterval(interval);
-  }, [gender, team1, team2]);
+  }, [getMatchData]);
 
   const handleBackToSelection = () => {
     navigate("/");
   };
 
   const getWinnerStatus = () => {
-    if (!matchData || matchData.score1 === 0 && matchData.score2 === 0) {
+    if (!matchData || (matchData.score1 === 0 && matchData.score2 === 0)) {
       return "upcoming";
     }
     if (matchData.score1 > matchData.score2) {
