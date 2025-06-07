@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import MatchCard from "../components/MatchCard";
 import SectionTitle from "../components/SectionTitle";
 import Navbar from "../components/Navbar";
 import { fetchMatchups } from "../utils/api";
 import "../css/HomePage.css";
 
-const HomePage = () => {
+const AllMatches = () => {
   const [menMatches, setMenMatches] = useState([]);
   const [womenMatches, setWomenMatches] = useState([]);
   const [lastUpdated, setLastUpdated] = useState(null);
   const [serverTime, setServerTime] = useState(null);
+  const navigate = useNavigate();
 
   const getMatchups = async () => {
     try {
@@ -37,6 +39,21 @@ const HomePage = () => {
       <Navbar />
       <div className="homepage">
         <div className="refresh-section">
+          <button 
+            onClick={() => navigate("/")} 
+            className="back-button"
+            style={{
+              background: '#026937',
+              color: 'white',
+              border: 'none',
+              padding: '0.75rem 1.5rem',
+              borderRadius: '50px',
+              cursor: 'pointer',
+              marginBottom: '1rem'
+            }}
+          >
+            ← Select Specific Teams
+          </button>
           <div className="time-info">
             {lastUpdated && (
               <div className="time-display">
@@ -91,4 +108,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default AllMatches;
