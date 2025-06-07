@@ -1,0 +1,64 @@
+.minimalist-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(203, 213, 224, 0.3);
+  padding: 1rem 2rem;
+}
+
+.brand-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.brand-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ivy-symbol {
+  font-size: 2rem;
+  transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #026937, #059e52);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.025em;
+}
+
+.brand-link:hover .ivy-symbol {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.brand-link:hover .brand-name {
+  background: linear-gradient(135deg, #1a365d, #2b6cb0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .minimalist-header {
+    padding: 0.75rem 1rem;
+  }
+  
+  .ivy-symbol {
+    font-size: 1.75rem;
+  }
+  
+  .brand-name {
+    font-size: 1.3rem;
+  }
+} 

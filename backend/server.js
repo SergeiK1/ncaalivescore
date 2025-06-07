@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const { generateScores, watchSpreadsheet } = require("./services/generateScores");
+const fs = require("fs");
 
 const app = express();
 
@@ -26,6 +27,25 @@ app.use("/assets", express.static(path.join(__dirname, "assets")));
 // Routes
 const scoresRoute = require("./routes/scores");
 app.use("/api/scores", scoresRoute);
+
+// Serve team logos
+app.get('/api/logo/:team', (req, res) => {
+  const { team } = req.params;
+  const logoPath = path.join(__dirname, 'public', 'logos', `${team}.png`);
+  
+  // Check if logo file exists
+  if (fs.existsSync(logoPath)) {
+    res.sendFile(logoPath);
+  } else {
+    // Return a default/placeholder logo if specific logo doesn't exist
+    const defaultLogoPath = path.join(__dirname, 'public', 'logos', 'default.png');
+    if (fs.existsSync(defaultLogoPath)) {
+      res.sendFile(defaultLogoPath);
+    } else {
+      res.status(404).json({ error: 'Logo not found' });
+    }
+  }
+});
 
 // Webhook endpoint for Google Sheets notifications
 app.post("/api/webhook", async (req, res) => {

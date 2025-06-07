@@ -65,32 +65,11 @@ const SchoolSelector = () => {
         <div className="selector-container">
           <h1 className="title">Select Teams</h1>
           
-          {/* Team Selection with Inline Gender Toggle */}
+          {/* Team Selection */}
           <div className="team-selection">
             <div className="team-column">
               <div className="column-header">
                 <h3 className="column-title">First Team</h3>
-                {/* Gender Toggle */}
-                <div className="gender-toggle">
-                  <button
-                    className={`toggle-btn ${selectedGender === "men" ? "active" : ""}`}
-                    onClick={() => {
-                      setSelectedGender("men");
-                      resetSelection();
-                    }}
-                  >
-                    Men's
-                  </button>
-                  <button
-                    className={`toggle-btn ${selectedGender === "women" ? "active" : ""}`}
-                    onClick={() => {
-                      setSelectedGender("women");
-                      resetSelection();
-                    }}
-                  >
-                    Women's
-                  </button>
-                </div>
               </div>
               <div className="selected-team">
                 {team1 ? (
@@ -122,8 +101,32 @@ const SchoolSelector = () => {
               </div>
             </div>
 
-            <div className="vs-divider">
-              <span className="vs-text">VS</span>
+            <div className="center-section">
+              {/* Gender Toggle */}
+              <div className="gender-toggle">
+                <button
+                  className={`toggle-btn ${selectedGender === "men" ? "active" : ""}`}
+                  onClick={() => {
+                    setSelectedGender("men");
+                    resetSelection();
+                  }}
+                >
+                  Men's
+                </button>
+                <button
+                  className={`toggle-btn ${selectedGender === "women" ? "active" : ""}`}
+                  onClick={() => {
+                    setSelectedGender("women");
+                    resetSelection();
+                  }}
+                >
+                  Women's
+                </button>
+              </div>
+              
+              <div className="vs-divider">
+                <span className="vs-text">VS</span>
+              </div>
             </div>
 
             <div className="team-column">
