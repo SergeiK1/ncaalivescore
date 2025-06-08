@@ -188,7 +188,10 @@ const MatchResults = () => {
               
               <div className="score-display">
                 <div className="score-container">
-                  <div className="main-score">{matchData.score1}</div>
+                  <div className="main-score">
+                    {matchData.score1}
+                    {matchData.hasMismatch && <span className="mismatch-asterisk">*</span>}
+                  </div>
                   {actualWinners.team1 && (
                     <div className="winner-badge">WINS!</div>
                   )}
@@ -252,7 +255,10 @@ const MatchResults = () => {
               
               <div className="score-display">
                 <div className="score-container">
-                  <div className="main-score">{matchData.score2}</div>
+                  <div className="main-score">
+                    {matchData.score2}
+                    {matchData.hasMismatch && <span className="mismatch-asterisk">*</span>}
+                  </div>
                   {actualWinners.team2 && (
                     <div className="winner-badge">WINS!</div>
                   )}

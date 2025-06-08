@@ -566,6 +566,21 @@
   color: #1a202c;
   text-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
   line-height: 1;
+  position: relative;
+}
+
+.mismatch-asterisk {
+  color: #e53e3e;
+  font-size: 0.6em;
+  font-weight: 900;
+  margin-left: 0.2em;
+  vertical-align: super;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
 }
 
 .winner-badge {
@@ -820,6 +835,10 @@
     font-size: 8rem;
   }
   
+  .mismatch-asterisk {
+    font-size: 0.55em;
+  }
+  
   .vs-text {
     font-size: 4.5rem;
   }
@@ -839,6 +858,10 @@
   
   .main-score {
     font-size: 6rem;
+  }
+  
+  .mismatch-asterisk {
+    font-size: 0.5em;
   }
   
   .team-name {
@@ -912,6 +935,10 @@
   
   .main-score {
     font-size: 5rem;
+  }
+  
+  .mismatch-asterisk {
+    font-size: 0.45em;
   }
   
   .team-logo {
@@ -1001,6 +1028,10 @@
   
   .main-score {
     font-size: 3rem;
+  }
+  
+  .mismatch-asterisk {
+    font-size: 0.4em;
   }
   
   .score-container {
@@ -1124,6 +1155,10 @@
     font-size: 2.5rem;
   }
   
+  .mismatch-asterisk {
+    font-size: 0.35em;
+  }
+  
   .vs-text {
     font-size: 1.4rem;
   }
@@ -1223,6 +1258,10 @@
   
   .main-score {
     font-size: 2rem;
+  }
+  
+  .mismatch-asterisk {
+    font-size: 0.3em;
   }
   
   .vs-text {
