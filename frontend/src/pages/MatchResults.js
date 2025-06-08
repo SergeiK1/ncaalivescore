@@ -181,7 +181,7 @@ const MatchResults = () => {
                 <div className="score-container">
                   <div className="main-score">{matchData.score1}</div>
                   {winnerStatus === "team1" && (
-                    <div className="winner-badge">🏆 WINS!</div>
+                    <div className="winner-badge">WINS!</div>
                   )}
                 </div>
                 <div className="progress-container">
@@ -218,12 +218,10 @@ const MatchResults = () => {
             </div>
 
             <div className="vs-section">
-              <div className="vs-content">
-                <div className="vs-text">VS</div>
-                {winnerStatus === "tie" && (
-                  <div className="tie-announcement">TIE GAME</div>
-                )}
-              </div>
+              <div className="vs-text">VS</div>
+              {winnerStatus === "tie" && (
+                <div className="tie-announcement">TIE GAME</div>
+              )}
             </div>
 
             {/* Team 2 */}
@@ -247,7 +245,7 @@ const MatchResults = () => {
                 <div className="score-container">
                   <div className="main-score">{matchData.score2}</div>
                   {winnerStatus === "team2" && (
-                    <div className="winner-badge">🏆 WINS!</div>
+                    <div className="winner-badge">WINS!</div>
                   )}
                 </div>
                 <div className="progress-container">

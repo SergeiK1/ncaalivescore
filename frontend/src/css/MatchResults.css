@@ -412,14 +412,14 @@
   box-shadow: 0 6px 20px rgba(2, 105, 55, 0.4);
 }
 
-/* Unified Match Layout - Flex to Fill Screen */
+/* Unified Match Layout - Full Width Usage */
 .unified-match-layout {
   flex: 1;
   display: flex;
   flex-direction: column;
-  max-width: 1600px;
+  width: 100%;
   margin: 0 auto;
-  padding: 1rem 2rem;
+  padding: 1rem;
   height: 100%;
 }
 
@@ -450,14 +450,16 @@
   box-shadow: 0 4px 15px rgba(245, 101, 101, 0.4);
 }
 
-/* Teams Comparison Layout - Fill Remaining Space */
+/* Teams Comparison Layout - Full Width */
 .teams-comparison {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
-  gap: 2rem;
+  gap: 3rem;
   align-items: stretch;
   flex: 1;
   min-height: 0;
+  width: 100%;
+  max-width: none;
 }
 
 /* Team Display - Consistent Left Layout */
@@ -474,6 +476,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  min-width: 0;
 }
 
 .team-display:hover {
@@ -687,7 +690,7 @@
   background-clip: text;
 }
 
-/* VS Section - Simple and Clean */
+/* VS Section - Clean Text Only */
 .vs-section {
   display: flex;
   flex-direction: column;
@@ -697,25 +700,15 @@
   min-width: 120px;
 }
 
-.vs-content {
-  text-align: center;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 20px;
-  padding: 2rem 1rem;
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-}
-
 .vs-text {
-  font-size: 3rem;
+  font-size: 4rem;
   font-weight: 900;
   background: linear-gradient(135deg, #026937, #059e52);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  letter-spacing: 0.1em;
-  margin-bottom: 0.5rem;
+  letter-spacing: 0.2em;
+  margin-bottom: 1rem;
 }
 
 .tie-announcement {
@@ -725,7 +718,6 @@
   border-radius: 25px;
   font-weight: 600;
   font-size: 0.9rem;
-  margin-top: 0.5rem;
 }
 
 /* Footer - Not Persistent */
@@ -739,8 +731,6 @@
 }
 
 .update-info {
-  max-width: 1600px;
-  margin: 0 auto;
   text-align: center;
   font-size: 0.9rem;
   color: #4a5568;
@@ -799,8 +789,26 @@
   box-shadow: 0 6px 20px rgba(2, 105, 55, 0.4);
 }
 
-/* Responsive Design */
+/* Responsive Design - Better Width Usage */
+@media (max-width: 1600px) {
+  .unified-match-layout {
+    padding: 1rem 2rem;
+  }
+  
+  .teams-comparison {
+    gap: 2.5rem;
+  }
+}
+
 @media (max-width: 1400px) {
+  .unified-match-layout {
+    padding: 1rem 1.5rem;
+  }
+  
+  .teams-comparison {
+    gap: 2rem;
+  }
+  
   .main-score {
     font-size: 5rem;
   }
@@ -818,17 +826,20 @@
   .teams-comparison {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
-    gap: 1.5rem;
+    gap: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
   }
   
   .vs-section {
     order: -1;
-    padding: 0.5rem;
+    padding: 1rem;
     min-width: auto;
   }
   
   .vs-text {
-    font-size: 2.5rem;
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
   }
   
   .match-title {
@@ -849,6 +860,15 @@
 @media (max-width: 768px) {
   .grand-match-display {
     padding: 0.5rem;
+  }
+  
+  .unified-match-layout {
+    padding: 0.5rem;
+  }
+  
+  .teams-comparison {
+    gap: 1.5rem;
+    max-width: 100%;
   }
   
   .team-info {
@@ -883,7 +903,7 @@
   }
   
   .vs-text {
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
   
   .match-title {
@@ -927,6 +947,10 @@
 }
 
 @media (max-width: 480px) {
+  .teams-comparison {
+    gap: 1rem;
+  }
+  
   .team-logo {
     width: 70px;
     height: 70px;
@@ -941,7 +965,7 @@
   }
   
   .vs-text {
-    font-size: 1.75rem;
+    font-size: 2rem;
   }
   
   .progress-bar {
@@ -966,9 +990,5 @@
   
   .breakdown-title {
     font-size: 1.1rem;
-  }
-  
-  .vs-content {
-    padding: 1.5rem 0.75rem;
   }
 } 
