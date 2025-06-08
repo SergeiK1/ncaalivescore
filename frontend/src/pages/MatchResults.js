@@ -54,17 +54,17 @@ const MatchResults = () => {
       const data = await fetchMatchups();
       const match = findMatchData(data);
       
-      // Add simulated breakdown data (can be replaced with real data later)
-      if (match) {
+      // Use real backend breakdown data if available
+      if (match && match.breakdown) {
         match.breakdown1 = {
-          epee: Math.floor(match.score1 * 0.33),
-          foil: Math.floor(match.score1 * 0.33),
-          saber: match.score1 - Math.floor(match.score1 * 0.66)
+          epee: match.breakdown.epee.team1,
+          foil: match.breakdown.foil.team1,
+          saber: match.breakdown.saber.team1
         };
         match.breakdown2 = {
-          epee: Math.floor(match.score2 * 0.33),
-          foil: Math.floor(match.score2 * 0.33),
-          saber: match.score2 - Math.floor(match.score2 * 0.66)
+          epee: match.breakdown.epee.team2,
+          foil: match.breakdown.foil.team2,
+          saber: match.breakdown.saber.team2
         };
       }
       
