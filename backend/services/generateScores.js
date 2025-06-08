@@ -168,6 +168,43 @@ async function watchSpreadsheet() {
   }
 }
 
+// Helper to fetch and parse the breakdown block for a given school/gender/opponent
+async function fetchMatchupBreakdown(school, gender, opponent) {
+  // Find the starting row for the breakdown block for this opponent
+  // We'll fetch a large enough range to cover all breakdowns for the gender
+  // and then search for the correct block in the data
+  const breakdownRange = breakdownTabs[school]?.[gender];
+  if (!breakdownRange) return null;
+
+  // Expand the range to cover all possible blocks (e.g., A11:C35 for women)
+  // We'll fetch from the first breakdown row to a reasonable lower bound
+  let rangeStart = breakdownRange.split('!')[1].replace(/\d+$/, '');
+  let rangeSheet = breakdownRange.split('!')[0];
+  let startRow = parseInt(breakdownRange.match(/\d+/)[0], 10);
+  let endRow = startRow + 24; // enough for 6 blocks of 4 rows
+  let fullRange = `${rangeSheet}!${rangeStart}${startRow}:${rangeStart.replace(':','')}${endRow}`;
+
+  const data = await fetchSheetData(fullRange);
+  // Find the block for the correct opponent
+  for (let i = 0; i < data.length; i++) {
+    const row = data[i];
+    if (!row[0]) continue;
+    // Look for a header like "Columbia (Women)" or "Columbia (Men)"
+    if (row[0].toLowerCase().includes(opponent.toLowerCase())) {
+      // Next 3 rows are Epee, Foil, Saber
+      const epee = data[i+1] || [];
+      const foil = data[i+2] || [];
+      const saber = data[i+3] || [];
+      return {
+        epee: { team1: parseInt(epee[1]) || 0, team2: parseInt(epee[2]) || 0 },
+        foil: { team1: parseInt(foil[1]) || 0, team2: parseInt(foil[2]) || 0 },
+        saber: { team1: parseInt(saber[1]) || 0, team2: parseInt(saber[2]) || 0 }
+      };
+    }
+  }
+  return null;
+}
+
 // Function to generate scores
 async function generateScores() {
   try {
@@ -209,18 +246,14 @@ async function generateScores() {
     const processedMatches = new Set();
 
     ['men', 'women'].forEach(gender => {
-      rawMatches[gender].forEach(match => {
+      rawMatches[gender].forEach(async match => {
         const matchKey = [match.reportingTeam, match.opponent].sort().join('-');
-        
         if (processedMatches.has(`${gender}-${matchKey}`)) {
-          return; // Already processed this matchup
+          return;
         }
-
-        // Find the corresponding match from the opponent's perspective
         const counterMatch = rawMatches[gender].find(m => 
           m.reportingTeam === match.opponent && m.opponent === match.reportingTeam
         );
-
         let finalMatch = {
           team1: match.reportingTeam,
           team2: match.opponent,
@@ -228,21 +261,16 @@ async function generateScores() {
           score2: match.opponentScore,
           hasMismatch: false
         };
-
         if (counterMatch) {
-          // Check if scores align (match.selfScore should equal counterMatch.opponentScore)
           const scoresAlign = (
             match.selfScore === counterMatch.opponentScore &&
             match.opponentScore === counterMatch.selfScore
           );
-
           if (!scoresAlign) {
             console.warn(
               `⚠️ Score mismatch in ${gender}: ${match.reportingTeam} reports ${match.selfScore}-${match.opponentScore} vs ${match.opponent}, but ${match.opponent} reports ${counterMatch.selfScore}-${counterMatch.opponentScore} vs ${match.reportingTeam}`
             );
             finalMatch.hasMismatch = true;
-            
-            // Use the match from alphabetically first team as primary source
             if (match.opponent < match.reportingTeam) {
               finalMatch = {
                 team1: counterMatch.reportingTeam,
@@ -254,10 +282,10 @@ async function generateScores() {
             }
           }
         } else {
-          // Only one team reported this match
           console.log(`ℹ️ Only ${match.reportingTeam} reported match vs ${match.opponent} in ${gender}`);
         }
-
+        // Fetch and attach breakdown
+        finalMatch.breakdown = await fetchMatchupBreakdown(match.reportingTeam, gender, match.opponent);
         scores[gender].push(finalMatch);
         processedMatches.add(`${gender}-${matchKey}`);
       });
