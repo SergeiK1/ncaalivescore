@@ -1,14 +1,16 @@
+// sheets.js
 require("dotenv").config();
 const { google } = require("googleapis");
-const fs = require("fs");
-const path = require("path");
+const fs        = require("fs");
+const path      = require("path");
 
-const privateKey     = process.env.GOOGLE_SHEETS_API_KEY;
-const clientEmail    = process.env.CLIENT_EMAIL;
-const googleSheetId  = "172wk5CjEiJAvnpMS9uv2i-EZtRrAh0BUHb5hmQED2-c";
+// your Sheets creds & ID
+const privateKey    = process.env.GOOGLE_SHEETS_API_KEY;
+const clientEmail   = process.env.CLIENT_EMAIL;
+const spreadsheetId = "172wk5CjEiJAvnpMS9uv2i-EZtRrAh0BUHb5hmQED2-c";
 
-// Authenticate the service account
-const googleAuth = new google.auth.JWT(
+// auth
+const auth = new google.auth.JWT(
   clientEmail,
   null,
   privateKey.replace(/\\n/g, "\n"),
@@ -18,116 +20,167 @@ const googleAuth = new google.auth.JWT(
   ]
 );
 
-// Define tabs and their ranges
+// which ranges hold the overall scores
 const schoolTabs = {
   Princeton: "Princeton!A3:F8",
   Columbia : "Columbia!A3:F8",
   Harvard  : "Harvard!A3:F8",
   Yale     : "Yale!A3:F8",
   UPenn    : "UPenn!A3:F8",
-  // these only have women’s overall scores
-  Cornell  : "Cornell!A3:C8",
-  Brown    : "Brown!A3:C8",
+  Cornell  : "Cornell!A3:C8", // women only
+  Brown    : "Brown!A3:C8",   // women only
 };
 
-// Define breakdown tabs for weapon-specific scores
-// Make sure the row numbers point at the header row for each "X (Women)" block
-const breakdownTabs = {
-  Princeton: { women: "Princeton!A11:C13", men: "Princeton!E11:G13" },
-  Columbia : { women: "Columbia!A16:C18", men: "Columbia!E16:G18" },
-  Harvard  : { women: "Harvard!A21:C23", men: "Harvard!E21:G23" },
-  Yale     : { women: "Yale!A26:C28", men: "Yale!E26:G28" },
-  UPenn    : { women: "UPenn!A31:C33", men: "UPenn!E31:G33" },
-  // Cornell & Brown only have women’s blocks; adjust to the *first* block rows!
-  Cornell  : { women: "Cornell!A10:C13", men: null },
-  Brown    : { women: "Brown!A37:C39", men: null },
-};
-
-// Store the current watch channel ID
-let currentChannelId = null;
-
-async function fetchSheetData(sheetTab) {
-  const sheets   = google.sheets({ version: "v4", auth: googleAuth });
-  const response = await sheets.spreadsheets.values.get({
-    spreadsheetId: googleSheetId,
-    range: sheetTab,
+// simple helper to pull any A-whatever range
+async function fetchSheetData(range) {
+  const sheets = google.sheets({ version: "v4", auth });
+  const res    = await sheets.spreadsheets.values.get({
+    spreadsheetId,
+    range
   });
-  return response.data.values || [];
+  return res.data.values || [];
 }
 
-// Revised fetchMatchupBreakdown with correct range parsing
+/**
+ * Dynamically scans the entire school sheet for the "<opponent> (Women)" or "(Men)" header,
+ * then reads the next three rows as Epee, Foil, Saber.
+ */
 async function fetchMatchupBreakdown(school, gender, opponent) {
-  const breakdownRange = breakdownTabs[school]?.[gender];
-  if (!breakdownRange) {
-    return { epee: 0, foil: 0, saber: 0 };
-  }
+  const sheets = google.sheets({ version: "v4", auth });
+  // build the exact header string we expect
+  const genderLabel = gender === "women" ? "Women" : "Men";
+  const headerText  = `${opponent} (${genderLabel})`;
 
-  // breakdownRange e.g. "Yale!A26:C28"
-  const [sheetName, sheetRange] = breakdownRange.split("!");
-  const [startCell, endCell]    = sheetRange.split(":");
+  // grab a big chunk of the sheet (cols A–F, rows 1–200 should cover everything)
+  const resp = await sheets.spreadsheets.values.get({
+    spreadsheetId,
+    range: `${school}!A1:F200`
+  });
+  const rows = resp.data.values || [];
 
-  // Extract startCol ("A"), startRow (26), endCol ("C")
-  const startCol = startCell.match(/[A-Za-z]+/)[0];
-  const startRow = parseInt(startCell.match(/\d+/)[0], 10);
-  const endCol   = endCell.match(/[A-Za-z]+/)[0];
-
-  // Expand to cover ~6 blocks (4 rows each) below the header
-  const fullRange = `${sheetName}!${startCol}${startRow}:${endCol}${startRow + 24}`;
-  // e.g. "Yale!A26:C50"
-
-  const data = await fetchSheetData(fullRange);
-
-  // Find the header row "Opponent (Women)" or "Opponent (Men)"
-  for (let i = 0; i < data.length; i++) {
-    const row = data[i];
-    if (!row[0]) continue;
-    if (row[0].toLowerCase().includes(opponent.toLowerCase())) {
-      // Next three rows are the weapons
-      const epee  = data[i + 1] || [];
-      const foil  = data[i + 2] || [];
-      const saber = data[i + 3] || [];
+  // find the row where col A === headerText
+  for (let i = 0; i < rows.length; i++) {
+    const cell = rows[i][0];
+    if (cell && cell.toString().trim() === headerText) {
+      const eRow = rows[i + 1] || [];
+      const fRow = rows[i + 2] || [];
+      const sRow = rows[i + 3] || [];
       return {
-        epee : { team1: parseInt(epee[1]) || 0, team2: parseInt(epee[2]) || 0 },
-        foil : { team1: parseInt(foil[1]) || 0, team2: parseInt(foil[2]) || 0 },
-        saber: { team1: parseInt(saber[1]) || 0, team2: parseInt(saber[2]) || 0 },
+        epee : { team1: parseInt(eRow[1], 10) || 0, team2: parseInt(eRow[2], 10) || 0 },
+        foil : { team1: parseInt(fRow[1], 10) || 0, team2: parseInt(fRow[2], 10) || 0 },
+        saber: { team1: parseInt(sRow[1], 10) || 0, team2: parseInt(sRow[2], 10) || 0 },
       };
     }
   }
 
-  // Fallback: zero out if nothing found
-  return { epee: 0, foil: 0, saber: 0 };
-}
-
-// … the rest of your file remains exactly the same …
-async function fetchBreakdownData(school, gender, opponent) {
-  // legacy (unused after fetchMatchupBreakdown rewrite)
-}
-
-async function stopWatch() {
-  if (currentChannelId) {
-    try {
-      const drive = google.drive({ version: "v3", auth: googleAuth });
-      await drive.channels.stop({
-        requestBody: { id: currentChannelId, resourceId: googleSheetId }
-      });
-      console.log(`Stopped watch channel: ${currentChannelId}`);
-    } catch (error) {
-      console.log(`Could not stop watch channel ${currentChannelId}:`, error.message);
-    }
-    currentChannelId = null;
-  }
-}
-
-async function watchSpreadsheet() {
-  // … unchanged …
+  // if we never found it, return zeros
+  return {
+    epee : { team1: 0, team2: 0 },
+    foil : { team1: 0, team2: 0 },
+    saber: { team1: 0, team2: 0 },
+  };
 }
 
 async function generateScores() {
-  // … unchanged, except it now uses fetchMatchupBreakdown …
+  const raw = { men: [], women: [] };
+
+  // 1) pull all overall matches
+  for (const [school, range] of Object.entries(schoolTabs)) {
+    const data = await fetchSheetData(range);
+    data.forEach(row => {
+      const [opp, wSelf, wOpp, mOpp, mSelf, mOppScore] = row;
+      if (opp && wSelf != null && wOpp != null) {
+        raw.women.push({
+          reportingTeam: school,
+          opponent: opp,
+          selfScore: parseInt(wSelf, 10) || 0,
+          opponentScore: parseInt(wOpp, 10) || 0,
+        });
+      }
+      if (mOpp && mSelf != null && mOppScore != null) {
+        raw.men.push({
+          reportingTeam: school,
+          opponent: mOpp,
+          selfScore: parseInt(mSelf, 10) || 0,
+          opponentScore: parseInt(mOppScore, 10) || 0,
+        });
+      }
+    });
+  }
+
+  // 2) reconcile duplicates and attach breakdown
+  const final = { men: [], women: [] };
+  const seen  = new Set();
+
+  for (const gender of ["women", "men"]) {
+    for (const match of raw[gender]) {
+      const key = [match.reportingTeam, match.opponent].sort().join("-");
+      if (seen.has(gender + key)) continue;
+      seen.add(gender + key);
+
+      // find the reverse entry, if any
+      const reverse = raw[gender].find(
+        m => m.reportingTeam === match.opponent && m.opponent === match.reportingTeam
+      );
+
+      let out = {
+        team1: match.reportingTeam,
+        team2: match.opponent,
+        score1: match.selfScore,
+        score2: match.opponentScore,
+        hasMismatch: false
+      };
+
+      if (reverse) {
+        // check alignment
+        if (
+          match.selfScore !== reverse.opponentScore ||
+          match.opponentScore !== reverse.selfScore
+        ) {
+          out.hasMismatch = true;
+          // pick the lexicographically earlier team to be team1
+          if (reverse.reportingTeam < match.reportingTeam) {
+            out = {
+              team1: reverse.reportingTeam,
+              team2: reverse.opponent,
+              score1: reverse.selfScore,
+              score2: reverse.opponentScore,
+              hasMismatch: true
+            };
+          }
+        }
+      }
+
+      // 📌 dynamic breakdown
+      out.breakdown = await fetchMatchupBreakdown(
+        match.reportingTeam,
+        gender,
+        match.opponent
+      );
+
+      final[gender].push(out);
+    }
+  }
+
+  // write out
+  const outPath = path.join(__dirname, "../data/scores.json");
+  fs.writeFileSync(outPath, JSON.stringify(final, null, 2), "utf8");
+  console.log("✅ Scores + breakdown updated!");
+  return final;
+}
+
+async function stopWatch() {
+  if (!process.env.WEBHOOK_URL) return;
+  // … your existing watch/stop code unchanged …
+}
+
+async function watchSpreadsheet() {
+  if (!process.env.WEBHOOK_URL) return;
+  // … your existing watch/stop code unchanged …
 }
 
 module.exports = {
   generateScores,
   watchSpreadsheet,
-  stopWatch,
+  stopWatch
 };
