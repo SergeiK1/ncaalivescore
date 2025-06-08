@@ -104,6 +104,14 @@ const MatchResults = () => {
     return "tie";
   };
 
+  const hasActualWinner = () => {
+    if (!matchData) return { team1: false, team2: false };
+    return {
+      team1: matchData.score1 >= 14,
+      team2: matchData.score2 >= 14
+    };
+  };
+
   if (loading) {
     return (
       <>
@@ -136,6 +144,7 @@ const MatchResults = () => {
   }
 
   const winnerStatus = getWinnerStatus();
+  const actualWinners = hasActualWinner();
   const team1Colors = schoolColors[matchData.team1] || schoolColors.Princeton;
   const team2Colors = schoolColors[matchData.team2] || schoolColors.Princeton;
 
@@ -180,7 +189,7 @@ const MatchResults = () => {
               <div className="score-display">
                 <div className="score-container">
                   <div className="main-score">{matchData.score1}</div>
-                  {winnerStatus === "team1" && (
+                  {actualWinners.team1 && (
                     <div className="winner-badge">WINS!</div>
                   )}
                 </div>
@@ -244,7 +253,7 @@ const MatchResults = () => {
               <div className="score-display">
                 <div className="score-container">
                   <div className="main-score">{matchData.score2}</div>
-                  {winnerStatus === "team2" && (
+                  {actualWinners.team2 && (
                     <div className="winner-badge">WINS!</div>
                   )}
                 </div>

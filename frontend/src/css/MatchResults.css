@@ -112,10 +112,7 @@
   font-size: 1.5rem;
   font-weight: bold;
   color: white;
-  background: rgba(255, 255, 255, 0.2);
   padding: 1rem;
-  border-radius: 50%;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* Match Status */
@@ -381,7 +378,7 @@
   height: 100vh;
   background: linear-gradient(135deg, #f0f4f8 0%, #d6e7f0 100%);
   position: relative;
-  padding: 2rem;
+  padding: 2rem 3rem;
   box-sizing: border-box;
   overflow: hidden;
   display: flex;
@@ -420,8 +417,9 @@
   flex-direction: column;
   width: 100%;
   margin: 0 auto;
-  padding: 2rem 4rem;
+  padding: 2rem 6rem;
   height: 100%;
+  max-width: calc(100vw - 12rem);
 }
 
 /* Match Header - Larger */
@@ -704,12 +702,10 @@
 .vs-text {
   font-size: 6rem;
   font-weight: 900;
-  background: linear-gradient(135deg, #026937, #059e52);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #1a365d;
   letter-spacing: 0.3em;
   margin-bottom: 1.5rem;
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
 .tie-announcement {
@@ -726,7 +722,7 @@
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(10px);
   border-top: 2px solid rgba(226, 232, 240, 0.8);
-  padding: 1.5rem 4rem;
+  padding: 1.5rem 6rem;
   margin-top: auto;
   flex-shrink: 0;
 }
@@ -796,7 +792,8 @@
 /* Responsive Design - Better Laptop & Mobile Scaling */
 @media (max-width: 1600px) {
   .unified-match-layout {
-    padding: 2rem 3rem;
+    padding: 2rem 4rem;
+    max-width: calc(100vw - 8rem);
   }
   
   .teams-comparison {
@@ -812,13 +809,14 @@
   }
   
   .vs-text {
-    font-size: 5rem;
+    font-size: 4.5rem;
   }
 }
 
 @media (max-width: 1400px) {
   .unified-match-layout {
-    padding: 1.5rem 2rem;
+    padding: 1.5rem 3rem;
+    max-width: calc(100vw - 6rem);
   }
   
   .teams-comparison {
@@ -834,7 +832,7 @@
   }
   
   .vs-text {
-    font-size: 4rem;
+    font-size: 3.5rem;
   }
   
   .team-display {
@@ -881,7 +879,7 @@
   }
   
   .vs-text {
-    font-size: 3rem;
+    font-size: 2.5rem;
     margin-bottom: 0.5rem;
   }
   
@@ -992,7 +990,7 @@
   }
   
   .vs-text {
-    font-size: 2rem;
+    font-size: 1.8rem;
     margin-bottom: 0.5rem;
   }
   
@@ -1092,7 +1090,7 @@
   }
   
   .vs-text {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
   
   .winner-badge {
@@ -1191,7 +1189,7 @@
   }
   
   .vs-text {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
   }
   
   .team-logo {

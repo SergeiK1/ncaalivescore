@@ -229,7 +229,7 @@
   border-radius: 12px;
   font-weight: bold;
   font-size: 1.1rem;
-  box-shadow: 0 4px 12px rgba(2, 105, 55, 0.3);
+  /* box-shadow: 0 4px 12px rgba(2, 105, 55, 0.3); */
   min-width: 60px;
   text-align: center;
 }
