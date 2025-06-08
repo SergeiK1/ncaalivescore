@@ -26,6 +26,17 @@ const schoolTabs = {
   Brown: "Brown!A3:C8", // Women-only
 };
 
+// Define breakdown tabs for weapon-specific scores
+const breakdownTabs = {
+  Princeton: { women: "Princeton!A11:C13", men: "Princeton!E11:G13" },
+  Columbia: { women: "Columbia!A16:C18", men: "Columbia!E16:G18" },
+  Harvard: { women: "Harvard!A21:C23", men: "Harvard!E21:G23" },
+  Yale: { women: "Yale!A26:C28", men: "Yale!E26:G28" },
+  UPenn: { women: "UPenn!A31:C33", men: "UPenn!E31:G33" },
+  Cornell: { women: "Cornell!A31:C33", men: null }, // Women-only
+  Brown: { women: "Brown!A37:C39", men: null }, // Women-only
+};
+
 // Store the current watch channel ID
 let currentChannelId = null;
 
@@ -37,6 +48,49 @@ async function fetchSheetData(sheetTab) {
     range: sheetTab,
   });
   return response.data.values || [];
+}
+
+// Function to fetch breakdown data for weapon scores
+async function fetchBreakdownData(school, gender, opponent) {
+  const breakdownRange = breakdownTabs[school]?.[gender];
+  if (!breakdownRange) {
+    return { epee: 0, foil: 0, saber: 0 };
+  }
+
+  try {
+    const breakdownData = await fetchSheetData(breakdownRange);
+    
+    // Find the row for this opponent
+    const opponentRow = breakdownData.find(row => 
+      row[0] && row[0].toLowerCase().includes(opponent.toLowerCase())
+    );
+    
+    if (opponentRow) {
+      // Extract weapon scores - assuming columns are [Weapon, Score(Self), Score(Opponent)]
+      const selfScore = parseInt(opponentRow[1]) || 0;
+      return { [opponentRow[0].toLowerCase()]: selfScore };
+    }
+    
+    // If no specific opponent row found, try to parse by weapon rows
+    const breakdown = { epee: 0, foil: 0, saber: 0 };
+    breakdownData.forEach(row => {
+      if (row[0]) {
+        const weapon = row[0].toLowerCase();
+        if (weapon.includes('epee')) {
+          breakdown.epee = parseInt(row[1]) || 0;
+        } else if (weapon.includes('foil')) {
+          breakdown.foil = parseInt(row[1]) || 0;
+        } else if (weapon.includes('saber')) {
+          breakdown.saber = parseInt(row[1]) || 0;
+        }
+      }
+    });
+    
+    return breakdown;
+  } catch (error) {
+    console.warn(`Warning: Could not fetch breakdown for ${school} ${gender} vs ${opponent}:`, error.message);
+    return { epee: 0, foil: 0, saber: 0 };
+  }
 }
 
 // Function to stop existing watch
