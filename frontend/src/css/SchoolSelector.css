@@ -225,14 +225,11 @@
 }
 
 .vs-text {
-  background: linear-gradient(135deg, #026937, #059e52);
-  color: white;
-  padding: 1rem;
-  border-radius: 12px;
-  font-weight: bold;
-  font-size: 1.1rem;
-  box-shadow: 0 4px 12px rgba(2, 105, 55, 0.3);
-  min-width: 60px;
+  color: #4a5568;
+  padding: 0.5rem;
+  font-weight: 500;
+  font-size: 0.8rem;
+  min-width: 30px;
   text-align: center;
 }
 
