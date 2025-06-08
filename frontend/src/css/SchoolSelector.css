@@ -115,9 +115,10 @@
   gap: 0.5rem;
   padding: 1rem;
   border-radius: 16px;
-  background: linear-gradient(135deg, #026937, #059e52);
-  color: white;
-  box-shadow: 0 6px 20px rgba(2, 105, 55, 0.3);
+  background: linear-gradient(135deg, #e6f7ed, #d1f2df);
+  color: #1a202c;
+  border: 2px solid #48bb78;
+  box-shadow: 0 6px 20px rgba(72, 187, 120, 0.2);
   min-width: 120px;
 }
 
@@ -182,10 +183,11 @@
 }
 
 .school-card.selected {
-  background: linear-gradient(135deg, #026937, #059e52);
-  color: white;
+  background: linear-gradient(135deg, #e6f7ed, #d1f2df);
+  color: #1a202c;
+  border: 2px solid #48bb78;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(2, 105, 55, 0.3);
+  box-shadow: 0 6px 20px rgba(72, 187, 120, 0.2);
 }
 
 .school-card.unavailable {
@@ -229,7 +231,7 @@
   border-radius: 12px;
   font-weight: bold;
   font-size: 1.1rem;
-  /* box-shadow: 0 4px 12px rgba(2, 105, 55, 0.3); */
+  box-shadow: 0 4px 12px rgba(2, 105, 55, 0.3);
   min-width: 60px;
   text-align: center;
 }
